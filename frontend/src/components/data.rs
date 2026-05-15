@@ -98,6 +98,12 @@ pub struct ProjectEntry<'a> {
 
 pub const PROJECTS: &[ProjectEntry] = &[
     ProjectEntry {
+        name: "FerroCrypt",
+        description: "A pure Rust library, CLI, and desktop application for encrypting and decrypting files and directories using password-based or key-pair-based encryption.",
+        url: "https://github.com/alexylon/ferrocrypt",
+        homepage: Some("https://www.ferrocrypt.app"),
+    },
+    ProjectEntry {
         name: "Sofos Code",
         description: "AI coding assistant for the terminal built in pure Rust, with Claude/GPT support, file editing, and MCP integration. Published on crates.io.",
         url: "https://github.com/alexylon/sofos-code",
@@ -107,12 +113,6 @@ pub const PROJECTS: &[ProjectEntry] = &[
         name: "Sofos Web",
         description: "Multi-model AI chatbot built with React, Next.js, and Material UI, with image analysis and speech-to-text. Supports OpenAI, Anthropic, and Google.",
         url: "https://github.com/alexylon/sofos-web",
-        homepage: None,
-    },
-    ProjectEntry {
-        name: "FerroCrypt",
-        description: "CLI and GUI encryption/decryption tool built in Rust, using XChaCha20-Poly1305 and RSA-4096. Published on crates.io.",
-        url: "https://github.com/alexylon/ferrocrypt",
         homepage: None,
     },
     ProjectEntry {

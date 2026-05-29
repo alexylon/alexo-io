@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b0c0e" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#f5f4ef" media="(prefers-color-scheme: light)">
     <title>Alexander Alexandrov — Senior Full-Stack Developer</title>
     <meta name="description" content="Software developer based in Sofia, BG. Building web applications and backend systems with Rust, TypeScript, JavaScript, React, and more.">
 
@@ -21,8 +23,30 @@
     <meta name="twitter:image" content="https://alexo.io/og-image.png">
 
     <link rel="me" href="https://fosstodon.org/@lexer">
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Alexander Alexandrov",
+        "jobTitle": "Senior Full-Stack Developer",
+        "url": "https://alexo.io/",
+        "image": "https://alexo.io/og-image.png",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Sofia",
+            "addressCountry": "BG"
+        },
+        "knowsAbout": ["Rust", "TypeScript", "JavaScript", "Java", "React", "WebAssembly"],
+        "sameAs": [
+            "https://github.com/alexylon",
+            "https://www.linkedin.com/in/alexandrovalexander/",
+            "https://fosstodon.org/@lexer"
+        ]
+    }
+    </script>
     <script>
-        (function(){var d=window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches;document.documentElement.style.background=d?'#1d2021':'#f5eed6';})();
+        (function(){var d=window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches;document.documentElement.style.background=d?'#0b0c0e':'#f5f4ef';})();
     </script>
     <style>body { opacity: 0; } body.ready { opacity: 1; transition: opacity 80ms ease; }</style>
 </head>

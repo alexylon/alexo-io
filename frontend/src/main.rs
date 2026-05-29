@@ -19,8 +19,8 @@ enum Theme {
 impl Theme {
     fn css_class(&self) -> &'static str {
         match self {
-            Theme::Dark => "gruvbox-dark",
-            Theme::Light => "gruvbox-light",
+            Theme::Dark => "theme-dark",
+            Theme::Light => "theme-light",
         }
     }
 
@@ -104,13 +104,6 @@ fn App() -> Element {
     let font_css = format!(
         r#"
         @font-face {{
-            font-family: 'Aptos BG';
-            src: url('{}') format('truetype');
-            font-weight: 400;
-            font-style: normal;
-            font-display: swap;
-        }}
-        @font-face {{
             font-family: 'Atkinson Hyperlegible Next';
             src: url('{}') format('opentype');
             font-weight: 400;
@@ -132,7 +125,6 @@ fn App() -> Element {
             font-display: swap;
         }}
         "#,
-        asset!("/assets/fonts/Aptos-BG.ttf"),
         asset!("/assets/fonts/AtkinsonHyperlegibleNext-Regular.otf"),
         asset!("/assets/fonts/Podkova-Bold.ttf"),
         asset!("/assets/fonts/AtkinsonHyperlegibleMono-Regular.otf"),
@@ -146,11 +138,11 @@ fn App() -> Element {
         }
         document::Link {
             rel: "stylesheet",
-            href: asset!("/assets/styling/gruvbox-dark.css"),
+            href: asset!("/assets/styling/theme-dark.css"),
         }
         document::Link {
             rel: "stylesheet",
-            href: asset!("/assets/styling/gruvbox-light.css"),
+            href: asset!("/assets/styling/theme-light.css"),
         }
         document::Link {
             rel: "icon",
@@ -163,8 +155,11 @@ fn App() -> Element {
             div {
                 class: "resume",
                 onmounted: move |cx| top_element.set(Some(cx.data())),
-                HeaderSection {}
-                AboutSection {}
+                header {
+                    class: "hero",
+                    HeaderSection {}
+                    AboutSection {}
+                }
                 SkillsSection { skills_section }
                 ExperienceSection { experience_section }
                 ProjectsSection { projects_section }

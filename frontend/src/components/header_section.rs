@@ -9,10 +9,17 @@ pub fn HeaderSection() -> Element {
     rsx! {
         section {
             class: "header-section section",
-            h1 { "{PROFILE.name}" }
+            span {
+                class: "hero-eyebrow reveal",
+                "{PROFILE.title}"
+            }
+            h1 {
+                class: "reveal",
+                "{PROFILE.name}"
+            }
             p {
-                class: "header-title",
-                "{PROFILE.title} \u{2022} Sofia, BG \u{2022} {years}+ years"
+                class: "hero-meta reveal",
+                "Sofia, Bulgaria \u{2002}/\u{2002} {years}+ years"
             }
         }
     }

@@ -23,6 +23,7 @@ pub const SKILL_CATEGORIES: &[SkillCategory] = &[
         skills: &[
             "React",
             "Dioxus",
+            "Slint",
             "Redux",
             "Material UI",
             "HTML",

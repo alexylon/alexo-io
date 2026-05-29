@@ -1,0 +1,37 @@
+/* "Ink" — dark theme. True-neutral charcoal with a single ember accent.
+
+   Tokens are declared on `body:has(main.theme-dark)` (not on the .theme-dark
+   element itself) so that body-level pseudo-elements — the grain and glow
+   layers — inherit them too. Custom properties only inherit downward, and
+   <body> is an ancestor of <main>. */
+
+body:has(main.theme-dark) {
+    background: #0b0c0e;
+    color: #c9cbd1;
+
+    /* Surfaces */
+    --bg: #0b0c0e;
+    --surface: #121419;
+    --surface-2: #181a20;
+
+    /* Hairlines */
+    --line: rgba(255, 255, 255, 0.08);
+    --line-strong: rgba(255, 255, 255, 0.15);
+
+    /* Text */
+    --text-strong: #f4f4f2;
+    --text: #c9cbd1;
+    --text-muted: #8b8d96;
+    --text-faint: #5c5e66;
+
+    /* Accent — ember */
+    --accent: #ff7d4d;
+    --glow: rgba(255, 125, 77, 0.14);
+
+    /* Effects */
+    --shadow: rgba(0, 0, 0, 0.5);
+    --overlay: rgba(8, 9, 11, 0.9);
+    --nav-bg: rgba(11, 12, 14, 0.72);
+    --nav-bg-solid: rgba(13, 14, 17, 0.95);
+    --grain-opacity: 0.06;
+}

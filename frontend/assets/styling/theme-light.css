@@ -1,0 +1,35 @@
+/* "Paper" — light theme. Warm off-white with a deep ember accent.
+
+   Tokens are declared on `body:has(main.theme-light)` so body-level
+   pseudo-elements (grain, glow) inherit them — see theme-dark.css. */
+
+body:has(main.theme-light) {
+    background: #f5f4ef;
+    color: #3d3f45;
+
+    /* Surfaces */
+    --bg: #f5f4ef;
+    --surface: #ffffff;
+    --surface-2: #efeee8;
+
+    /* Hairlines */
+    --line: rgba(24, 22, 20, 0.10);
+    --line-strong: rgba(24, 22, 20, 0.18);
+
+    /* Text */
+    --text-strong: #1b1c1f;
+    --text: #3d3f45;
+    --text-muted: #64666d;
+    --text-faint: #9a9ca2;
+
+    /* Accent — burnt ember */
+    --accent: #c0491a;
+    --glow: rgba(192, 73, 26, 0.10);
+
+    /* Effects */
+    --shadow: rgba(40, 33, 24, 0.13);
+    --overlay: rgba(245, 244, 239, 0.92);
+    --nav-bg: rgba(245, 244, 239, 0.72);
+    --nav-bg-solid: rgba(247, 246, 242, 0.96);
+    --grain-opacity: 0.05;
+}

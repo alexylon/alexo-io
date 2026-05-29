@@ -25,7 +25,7 @@
     --space-9: 96px;
 
     /* Layout */
-    --max-width: 64rem;
+    --max-width: 66rem;
     --content-padding: clamp(var(--space-5), 5vw, var(--space-8));
     --section-gap: clamp(3.75rem, 8vw, 6rem);
     --nav-height: 60px;
@@ -117,6 +117,7 @@ h1 {
     line-height: 1.06;
     letter-spacing: -0.02em;
     color: var(--text-strong);
+    text-wrap: balance;
 }
 
 /* Numbered section header: "01  EXPERIENCE ───────────────" */
@@ -152,13 +153,15 @@ h2::after {
 h3 {
     font-family: var(--font-serif);
     font-weight: 700;
-    font-size: 1.18rem;
+    font-size: 1.22rem;
     letter-spacing: -0.01em;
     color: var(--text-strong);
+    text-wrap: balance;
 }
 
 p {
     margin: 0;
+    text-wrap: pretty;
 }
 
 a {
@@ -389,6 +392,20 @@ a {
     height: 158px;
 }
 
+.about-photo-button {
+    appearance: none;
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-lg);
+    background: transparent;
+    cursor: zoom-in;
+}
+
 .about-photo-frame::before {
     content: "";
     position: absolute;
@@ -408,7 +425,7 @@ a {
     height: 100%;
     border-radius: var(--radius-lg);
     object-fit: cover;
-    cursor: pointer;
+    cursor: zoom-in;
     border: 1px solid var(--line-strong);
     background: var(--surface);
     box-shadow: 0 10px 30px var(--shadow);
@@ -421,7 +438,8 @@ a {
         opacity: 0.6;
     }
 
-    .about-photo-frame:hover .about-photo {
+    .about-photo-frame:hover .about-photo,
+    .about-photo-button:focus-visible .about-photo {
         border-color: var(--accent);
         transform: translate(-2px, -2px);
     }
@@ -736,11 +754,7 @@ a {
     border-radius: var(--radius-md);
     color: inherit;
     overflow: hidden;
-    transition: border-color var(--t-base), transform var(--t-base), box-shadow var(--t-base);
-}
-
-.project-card:visited {
-    color: inherit;
+    transition: border-color var(--t-base), transform var(--t-base), box-shadow var(--t-base), background-color var(--t-base);
 }
 
 /* Top hairline that ignites on hover */
@@ -797,18 +811,31 @@ a {
     font-weight: 700;
     font-size: 1.18rem;
     color: var(--text-strong);
+}
+
+.project-card-title-link {
+    color: inherit;
     transition: color var(--t-fast);
 }
 
+.project-card-title-link:visited {
+    color: inherit;
+}
+
 .project-card-arrow {
+    flex-shrink: 0;
     font-family: var(--font-mono);
     font-size: 0.95rem;
     color: var(--text-faint);
     transition: color var(--t-base), transform var(--t-base);
 }
 
+.project-card-arrow:visited {
+    color: var(--text-faint);
+}
+
 @media (hover: hover) and (pointer: fine) {
-    .project-card:hover .project-card-name {
+    .project-card:hover .project-card-title-link {
         color: var(--accent);
     }
 
@@ -825,25 +852,27 @@ a {
     flex-grow: 1;
 }
 
-.project-card-homepage {
-    display: block;
+.project-card-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
     margin-top: var(--space-4);
     font-family: var(--font-mono);
     font-size: 0.8rem;
 }
 
-.project-card-homepage a {
+.project-card-link {
     color: var(--accent);
     letter-spacing: 0.01em;
 }
 
-.project-card-homepage a::before {
+.project-card-link::before {
     content: "↗ ";
     opacity: 0.7;
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .project-card-homepage a:hover {
+    .project-card-link:hover {
         text-decoration: underline;
         text-underline-offset: 3px;
     }
@@ -876,6 +905,13 @@ a {
 }
 
 /* ─── Contact ─────────────────────────────────────────────────────────── */
+
+.contact-intro {
+    max-width: 58ch;
+    margin-top: calc(var(--space-6) * -0.45);
+    margin-bottom: var(--space-5);
+    color: var(--text-muted);
+}
 
 .contact-grid {
     display: flex;
@@ -1027,7 +1063,7 @@ a {
 .header-section .hero-eyebrow.reveal { animation-delay: 0.04s; }
 .header-section h1.reveal           { animation-delay: 0.12s; }
 .header-section .hero-meta.reveal   { animation-delay: 0.20s; }
-.about-photo-frame.reveal           { animation-delay: 0.30s; }
+.about-photo-button.reveal          { animation-delay: 0.30s; }
 .about-text.reveal                  { animation-delay: 0.38s; }
 
 @supports (animation-timeline: view()) {

@@ -22,7 +22,6 @@ pub const SKILL_CATEGORIES: &[SkillCategory] = &[
         name: "Frontend",
         skills: &[
             "React",
-            "Dioxus",
             "Slint",
             "Redux",
             "Material UI",
@@ -37,7 +36,7 @@ pub const SKILL_CATEGORIES: &[SkillCategory] = &[
     },
     SkillCategory {
         name: "Full-Stack",
-        skills: &["Next.js", "Node.js"],
+        skills: &["Next.js", "Node.js", "Dioxus"],
     },
     SkillCategory {
         name: "AI / ML",
@@ -62,28 +61,28 @@ pub const EXPERIENCE_ENTRIES: &[ExperienceEntry] = &[
         company: "Proxiad",
         period: "Aug 2023 – Present",
         responsibilities: &[
-            "Develop front-end applications for a digital publishing suite — Publications Editor, InDesign Plugin, Reader, Configurator, Assets Drive, and a cross-platform mobile app — using React, TypeScript, JavaScript, ExtendScript, Redux, and SCSS.",
-            "Contribute to Java back-end APIs, maintaining coding standards and test coverage.",
-            "Collaborate with UI/UX teams to streamline releases and improve feature turnaround time.",
+            "Build frontend applications for a digital publishing suite — Publications Editor, InDesign Plugin, Reader, Configurator, Assets Drive, and a cross-platform mobile app — with React, TypeScript, JavaScript, ExtendScript, Redux, and SCSS.",
+            "Maintain Java backend APIs with a focus on coding standards, test coverage, and reliability.",
+            "Partner with UI/UX teams to streamline releases and shorten feature turnaround time.",
         ],
     },
     ExperienceEntry {
         title: "Full-Stack Developer",
         company: "DXC Technology",
-        period: "Apr 2020 - Aug 2023",
+        period: "Apr 2020 – Aug 2023",
         responsibilities: &[
-            "Modernized an enterprise solution by migrating critical components from Java to Rust.",
-            "Developed VP/MS (Visual Product Modeling System) using React, TypeScript, Material UI, and Java, improving product visualization and user workflows.",
-            "Built a full-stack service using AWS SDK, React, TypeScript, and Terraform to integrate cloud infrastructure into customer-facing solutions.",
+            "Modernized enterprise components by migrating critical workflows from Java to Rust.",
+            "Developed VP/MS (Visual Product Modeling System) with React, TypeScript, Material UI, and Java, improving product visualization and user workflows.",
+            "Built a full-stack service with AWS SDK, React, TypeScript, and Terraform to integrate cloud infrastructure into customer-facing solutions.",
             "Developed features for the BMW Group Vulnerability Tool; optimized PostgreSQL schemas and iBATIS data layers, reducing query time by 90% (from 30s to 3s).",
         ],
     },
     ExperienceEntry {
         title: "Web Developer Intern",
         company: "Camplight",
-        period: "Sep 2019 - Apr 2020",
+        period: "Sep 2019 – Apr 2020",
         responsibilities: &[
-            "Developed a property management web application using React, Next.js, and GraphQL.",
+            "Built a property management web application with React, Next.js, and GraphQL.",
             "Wrote reusable UI components in TypeScript and Material UI.",
             "Collaborated with mentors on architecture reviews and code quality, delivering production-ready components.",
         ],
@@ -100,31 +99,31 @@ pub struct ProjectEntry<'a> {
 pub const PROJECTS: &[ProjectEntry] = &[
     ProjectEntry {
         name: "FerroCrypt",
-        description: "A pure Rust library, CLI, and desktop application for encrypting and decrypting files and directories using password-based or key-pair-based encryption.",
+        description: "Pure Rust library, CLI, and desktop app for encrypting and decrypting files and directories with password-based or key-pair encryption.",
         url: "https://github.com/alexylon/ferrocrypt",
         homepage: Some("https://www.ferrocrypt.app"),
     },
     ProjectEntry {
         name: "Sofos Code",
-        description: "AI coding assistant for the terminal built in pure Rust, with Claude/GPT support, file editing, and MCP integration. Published on crates.io.",
+        description: "Terminal AI coding assistant built in Rust, with Claude/GPT support, file editing, and MCP integration. Published on crates.io.",
         url: "https://github.com/alexylon/sofos-code",
         homepage: None,
     },
     ProjectEntry {
         name: "Sofos Web",
-        description: "Multi-model AI chatbot built with React, Next.js, and Material UI, with image analysis and speech-to-text. Supports OpenAI, Anthropic, and Google.",
+        description: "Multi-model AI chatbot built with React, Next.js, and Material UI, with image analysis and speech-to-text support for OpenAI, Anthropic, and Google models.",
         url: "https://github.com/alexylon/sofos-web",
         homepage: None,
     },
     ProjectEntry {
         name: "clavirio",
-        description: "A terminal typing tutor built with Rust and ratatui. Practice with built-in lessons or any text file while a virtual keyboard tracks your keystrokes in real time.",
+        description: "Terminal typing tutor built with Rust and ratatui. Practice with built-in lessons or any text file while a virtual keyboard tracks each keystroke.",
         url: "https://github.com/alexylon/clavirio",
         homepage: Some("https://www.clavir.io"),
     },
     ProjectEntry {
         name: "alexo.io",
-        description: "This website — a full-stack Rust app with a Dioxus/WASM frontend and an axum server. Hosted on a Raspberry Pi.",
+        description: "This website — a full-stack Rust app with a Dioxus/WASM frontend and an axum server, hosted on a Raspberry Pi.",
         url: "https://github.com/alexylon/alexo.io",
         homepage: None,
     },
@@ -236,7 +235,7 @@ pub const CONTACT_LINKS: &[ContactLink] = &[
         download: None,
     },
     ContactLink {
-        label: "Resume \u{2913}\u{FE0E}",
+        label: "Resume PDF",
         href: "",
         target: None,
         rel: None,

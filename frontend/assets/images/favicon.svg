@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">alexo.io</title>
+  <rect width="512" height="512" rx="128" fill="#0b0c0e"/>
+  <circle cx="256" cy="256" r="190" fill="#ff7d4d" opacity="0.14"/>
+  <path d="M333 158h-45l-12 67c-16-49-48-75-91-75-64 0-105 48-105 110 0 61 39 104 96 104 41 0 75-23 94-63l-9 55h117l8-43h-43l32-155Zm-139 162c-34 0-56-27-56-67 0-41 23-70 58-70 36 0 59 29 59 70 0 40-24 67-61 67Z" fill="#ff7d4d"/>
+</svg>

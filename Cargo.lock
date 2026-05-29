@@ -19,7 +19,7 @@ dependencies = [
 
 [[package]]
 name = "alexo-io"
-version = "0.2.2"
+version = "0.3.1"
 dependencies = [
  "dioxus",
  "js-sys",

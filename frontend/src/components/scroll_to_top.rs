@@ -38,6 +38,7 @@ pub fn ScrollToTop(
 
     rsx! {
         button {
+            r#type: "button",
             class: "scroll-to-top",
             class: if show_button() { "" } else { "hidden" },
             aria_label: "Scroll to top",
@@ -48,7 +49,7 @@ pub fn ScrollToTop(
             },
             img {
                 src: "{theme().icon_up()}",
-                alt: "Up Icon",
+                alt: "",
             }
         }
     }

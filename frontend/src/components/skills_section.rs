@@ -9,7 +9,7 @@ pub fn SkillsSection(skills_section: Signal<Option<Rc<MountedData>>>) -> Element
             id: "skills",
             onmounted: move |cx| skills_section.set(Some(cx.data())),
             class: "skills-section section",
-            h2 { "Key Tech Skills" }
+            h2 { "Technical Skills" }
             div {
                 class: "skills-categories",
                 {SKILL_CATEGORIES.iter().map(|cat| rsx! {

@@ -6,6 +6,7 @@
    <body> is an ancestor of <main>. */
 
 body:has(main.theme-dark) {
+    color-scheme: dark;
     background: #0b0c0e;
     color: #c9cbd1;
 

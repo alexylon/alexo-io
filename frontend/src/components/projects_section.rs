@@ -13,19 +13,23 @@ pub fn ProjectsSection(projects_section: Signal<Option<Rc<MountedData>>>) -> Ele
             div {
                 class: "projects-grid",
                 {PROJECTS.iter().map(|project| rsx! {
-                    a {
+                    article {
                         class: "project-card",
-                        href: "{project.url}",
-                        target: "_blank",
-                        rel: "noopener noreferrer",
                         div {
                             class: "project-card-header",
                             h3 {
                                 class: "project-card-name",
-                                "{project.name}"
+                                a {
+                                    class: "project-card-title-link",
+                                    href: "{project.url}",
+                                    target: "_blank",
+                                    rel: "noopener noreferrer",
+                                    "{project.name}"
+                                }
                             }
                             span {
                                 class: "project-card-arrow",
+                                aria_hidden: "true",
                                 "\u{2197}\u{FE0E}"
                             }
                         }
@@ -33,18 +37,24 @@ pub fn ProjectsSection(projects_section: Signal<Option<Rc<MountedData>>>) -> Ele
                             class: "project-card-desc",
                             "{project.description}"
                         }
-                        if let Some(homepage) = project.homepage {
-                            {
-                                let display = homepage.trim_start_matches("https://");
-                                rsx! {
-                                    span {
-                                        class: "project-card-homepage",
-                                        onclick: move |evt| evt.stop_propagation(),
+                        div {
+                            class: "project-card-links",
+                            a {
+                                class: "project-card-link",
+                                href: "{project.url}",
+                                target: "_blank",
+                                rel: "noopener noreferrer",
+                                "Source"
+                            }
+                            if let Some(homepage) = project.homepage {
+                                {
+                                    let display = homepage.trim_start_matches("https://");
+                                    rsx! {
                                         a {
+                                            class: "project-card-link",
                                             href: "{homepage}",
                                             target: "_blank",
                                             rel: "noopener noreferrer",
-                                            onclick: move |evt| evt.stop_propagation(),
                                             "{display}"
                                         }
                                     }

@@ -12,6 +12,10 @@ pub fn ContactSection(contact_section: Signal<Option<Rc<MountedData>>>) -> Eleme
             onmounted: move |cx| contact_section.set(Some(cx.data())),
             class: "contact-section section",
             h2 { "Contact" }
+            p {
+                class: "contact-intro",
+                "Open to thoughtful engineering conversations, Rust projects, and senior full-stack opportunities."
+            }
             div {
                 class: "contact-grid",
                 {CONTACT_LINKS.iter().map(|link| {

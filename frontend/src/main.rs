@@ -146,8 +146,8 @@ fn App() -> Element {
         }
         document::Link {
             rel: "icon",
-            r#type: "image/png",
-            href: asset!("/assets/images/favicon.png"),
+            r#type: "image/svg+xml",
+            href: asset!("/assets/images/favicon.svg"),
         }
         main {
             class: "{theme().css_class()}",

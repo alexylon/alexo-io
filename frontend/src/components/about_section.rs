@@ -13,25 +13,30 @@ pub fn AboutSection() -> Element {
         div {
             class: "about-block",
             div {
-                class: "about-photo-frame reveal",
-                img {
-                    class: "about-photo",
-                    src: asset!("/assets/images/profilepic.jpg"),
-                    alt: "Alexander Alexandrov",
-                    width: "158",
-                    height: "158",
+                class: "about-photo-frame",
+                button {
+                    r#type: "button",
+                    class: "about-photo-button reveal",
+                    aria_label: "Expand portrait of Alexander Alexandrov",
                     onclick: move |_| {
                         is_image_expanded.set(true);
+                    },
+                    img {
+                        class: "about-photo",
+                        src: asset!("/assets/images/profilepic.jpg"),
+                        alt: "Alexander Alexandrov",
+                        width: "158",
+                        height: "158",
                     }
                 }
             }
             div {
                 class: "about-text reveal",
                 p {
-                    "I'm a software developer who strives to write concise, readable, and \
-                    performant code \u{2014} and who reaches for "
+                    "I build web apps, backend services, and developer tools with clean, \
+                    readable, performant code \u{2014} using "
                     span { class: "accent", "Rust" }
-                    " whenever he can."
+                    " when it\u{2019}s the right tool."
                 }
                 div {
                     class: "hero-links",
@@ -74,8 +79,9 @@ pub fn AboutSection() -> Element {
                     let _ = cx.set_focus(true).await;
                 },
                 button {
+                    r#type: "button",
                     class: "close-button",
-                    aria_label: "Close image",
+                    aria_label: "Close portrait",
                     onclick: move |e| {
                         e.stop_propagation();
                         is_image_expanded.set(false);

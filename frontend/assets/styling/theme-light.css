@@ -4,6 +4,7 @@
    pseudo-elements (grain, glow) inherit them — see theme-dark.css. */
 
 body:has(main.theme-light) {
+    color-scheme: light;
     background: #f5f4ef;
     color: #3d3f45;
 

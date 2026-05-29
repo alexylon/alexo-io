@@ -19,7 +19,7 @@ pub fn HeaderSection() -> Element {
             }
             p {
                 class: "hero-meta reveal",
-                "Sofia, Bulgaria \u{2002}/\u{2002} {years}+ years"
+                "Sofia, Bulgaria \u{2002}/\u{2002} {years}+ years building software"
             }
         }
     }

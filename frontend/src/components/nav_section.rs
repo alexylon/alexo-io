@@ -21,6 +21,7 @@ fn NavLink(
     };
     rsx! {
         button {
+            r#type: "button",
             class: "{class}",
             tabindex: if tabbable { "0" } else { "-1" },
             onclick: move |_| async move {
@@ -149,6 +150,11 @@ pub fn NavSection(
 
     let active = active_section();
     let has_active = !active.is_empty();
+    let theme_label = match theme() {
+        Theme::Dark => "Switch to light theme",
+        Theme::Light => "Switch to dark theme",
+    };
+    let is_dark = matches!(theme(), Theme::Dark);
 
     rsx! {
         nav {
@@ -190,9 +196,11 @@ pub fn NavSection(
                     NavLink { label: "Contact", section: contact_section, is_active: active == "contact", tabbable: active == "contact" }
                 }
                 button {
+                    r#type: "button",
                     class: "theme-toggle",
                     tabindex: "-1",
-                    aria_label: "Toggle theme",
+                    aria_label: "{theme_label}",
+                    aria_pressed: "{is_dark}",
                     onclick: move |_| {
                         let new_theme = theme().toggle();
                         theme.set(new_theme);
@@ -202,7 +210,7 @@ pub fn NavSection(
                     },
                     img {
                         src: "{theme().icon_theme()}",
-                        alt: "Toggle theme",
+                        alt: "",
                         width: "22",
                     }
                 }

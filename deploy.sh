@@ -9,10 +9,8 @@
 # Config (edit as needed)
 # -------------------------
 PORT=7777
-SERVICE_NAME="alexo"
+SERVICE_NAME="alexo"          # systemd unit name (see /etc/systemd/system/alexo.service)
 STAGE_DIR="site_public"
-PID_FILE="${SERVICE_NAME}.pid"
-LOG_FILE="${SERVICE_NAME}.log"
 SERVER_BIN="target/release/server"
 
 # -------------------------
@@ -30,17 +28,11 @@ print_error()    { echo -e "${RED}[ERROR]${NC} $1"; }
 set -euo pipefail
 
 stop_server() {
-  if [[ -f "${PID_FILE}" ]]; then
-    PID=$(cat "${PID_FILE}")
-    if kill -0 "${PID}" 2>/dev/null; then
-      kill "${PID}"
-      print_success "Server stopped (pid ${PID})."
-    else
-      print_status "No running server at pid ${PID}."
-    fi
-    rm -f "${PID_FILE}"
+  if systemctl is-active --quiet "${SERVICE_NAME}"; then
+    sudo systemctl stop "${SERVICE_NAME}"
+    print_success "Server stopped."
   else
-    print_status "No pid file found. Server is not running."
+    print_status "Server is not running."
   fi
 }
 
@@ -94,34 +86,52 @@ if [[ ! -f "${SERVER_BIN}" ]]; then
 fi
 
 # -------------------------
-# Stage static files
+# Stage static files (build aside, then swap into place)
 # -------------------------
-rm -rf "${STAGE_DIR}"
-mkdir -p "${STAGE_DIR}"
-cp -R "${PUBDIR}/." "${STAGE_DIR}/"
+# Build the new site in a sibling dir so the running server keeps serving the
+# current one untouched during the slow copy, then swap it in with two quick
+# renames. Avoids the window where the live dir is empty/half-copied mid-deploy.
+STAGE_NEW="${STAGE_DIR}.new"
+STAGE_OLD="${STAGE_DIR}.old"
+rm -rf "${STAGE_NEW}" "${STAGE_OLD}"
+mkdir -p "${STAGE_NEW}"
+cp -R "${PUBDIR}/." "${STAGE_NEW}/"
 
 # Copy OG image to a stable path (Manganis hashes asset filenames)
-cp frontend/assets/images/og-image.png "${STAGE_DIR}/og-image.png"
+cp frontend/assets/images/og-image.png "${STAGE_NEW}/og-image.png"
+
+# Sanity-check the new build before swapping it in — never replace a live site
+# with a broken or empty one.
+if [[ ! -f "${STAGE_NEW}/index.html" ]]; then
+  print_error "New build missing index.html; keeping current site and aborting."
+  rm -rf "${STAGE_NEW}"
+  exit 1
+fi
+
+# Swap: current -> .old, new -> current, then drop .old
+if [[ -d "${STAGE_DIR}" ]]; then
+  mv "${STAGE_DIR}" "${STAGE_OLD}"
+fi
+mv "${STAGE_NEW}" "${STAGE_DIR}"
+rm -rf "${STAGE_OLD}"
 
 print_success "Staged static files to ./${STAGE_DIR}"
 
 # -------------------------
-# Restart server
+# Restart server (managed by systemd)
 # -------------------------
-stop_server
-
-print_status "Starting server on port ${PORT}..."
-nohup "${SERVER_BIN}" --port "${PORT}" --dir "${STAGE_DIR}" --no-reload \
-  > "${LOG_FILE}" 2>&1 &
-echo $! > "${PID_FILE}"
+# `systemctl restart` stops the old instance, waits for it to fully exit and
+# release the port, then starts the new one — no manual stop/start race.
+print_status "Restarting ${SERVICE_NAME} service..."
+sudo systemctl restart "${SERVICE_NAME}"
 
 sleep 1
-if kill -0 "$(cat "${PID_FILE}")" 2>/dev/null; then
+if systemctl is-active --quiet "${SERVICE_NAME}"; then
   print_success "Site is live at http://localhost:${PORT}"
-  print_status "Logs: tail -f ${LOG_FILE}"
-  print_status "Stop: ./deploy.sh stop"
+  print_status "Logs:   journalctl -u ${SERVICE_NAME} -f"
+  print_status "Status: systemctl status ${SERVICE_NAME}"
+  print_status "Stop:   ./deploy.sh stop"
 else
-  print_error "Server failed to start. Check ${LOG_FILE}"
-  rm -f "${PID_FILE}"
+  print_error "Service failed to start. Check: journalctl -u ${SERVICE_NAME} -e"
   exit 1
 fi

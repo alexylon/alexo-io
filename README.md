@@ -58,9 +58,20 @@ dx serve --package alexo-io
 ### Production
 
 ```bash
-./deploy.sh        # build frontend + server, start on port 7777
+./deploy.sh        # build frontend + server, restart the service
 ./deploy.sh stop   # stop the server
 ```
+
+The server runs as a systemd service (`alexo.service` in the repo root) so it
+starts on boot and restarts automatically if it crashes. `deploy.sh` rebuilds
+the site and runs `systemctl restart alexo`. First-time setup on the host:
+
+```bash
+sudo cp alexo.service /etc/systemd/system/
+sudo systemctl enable --now alexo
+```
+
+Inspect with `systemctl status alexo` and `journalctl -u alexo -f`.
 
 ## Server options
 

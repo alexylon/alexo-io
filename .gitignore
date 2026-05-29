@@ -24,6 +24,8 @@ target/
 
 # Deploy staging
 site_public/
+site_public.new/
+site_public.old/
 *.log
 *.pid
 

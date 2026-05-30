@@ -14,7 +14,7 @@ pub fn ContactSection(contact_section: Signal<Option<Rc<MountedData>>>) -> Eleme
             h2 { "Contact" }
             p {
                 class: "contact-intro",
-                "Open to thoughtful engineering conversations, Rust projects, and senior full-stack opportunities."
+                "Always happy to talk software design, Rust, or wine."
             }
             div {
                 class: "contact-grid",

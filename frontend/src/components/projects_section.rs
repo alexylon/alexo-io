@@ -27,11 +27,6 @@ pub fn ProjectsSection(projects_section: Signal<Option<Rc<MountedData>>>) -> Ele
                                     "{project.name}"
                                 }
                             }
-                            span {
-                                class: "project-card-arrow",
-                                aria_hidden: "true",
-                                "\u{2197}\u{FE0E}"
-                            }
                         }
                         p {
                             class: "project-card-desc",

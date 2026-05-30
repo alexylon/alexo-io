@@ -2,7 +2,7 @@ use crate::components::data::CONTACT_LINKS;
 use dioxus::prelude::*;
 
 /// Labels surfaced as quick links in the masthead (the rest live in Contact).
-const HERO_LINK_LABELS: &[&str] = &["Email", "GitHub", "LinkedIn", "Resume"];
+const HERO_LINK_LABELS: &[&str] = &["Email", "GitHub", "LinkedIn", "Mastodon", "Resume"];
 
 #[component]
 pub fn AboutSection() -> Element {

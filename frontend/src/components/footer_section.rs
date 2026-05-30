@@ -14,10 +14,10 @@ pub fn FooterSection() -> Element {
             p { "\u{00A9} {year} Alexander Alexandrov" }
             p {
                 a {
-                    href: "https://github.com/alexylon/alexo.io",
+                    href: "https://github.com/alexylon/alexo-io",
                     target: "_blank",
                     rel: "noopener noreferrer",
-                    "Source code"
+                    "Source"
                 }
             }
         }

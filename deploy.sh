@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Deploy alexan.dev — build frontend + server, then run on port 7777
+# Deploy alexo-io — build frontend + server, then run on port 7777
 #
 # Usage:
 #   ./deploy.sh          Build and start the server

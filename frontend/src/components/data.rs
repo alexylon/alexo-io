@@ -124,7 +124,7 @@ pub const PROJECTS: &[ProjectEntry] = &[
     ProjectEntry {
         name: "alexo.io",
         description: "This website — a full-stack Rust app with a Dioxus/WASM frontend and an axum server, hosted on a Raspberry Pi.",
-        url: "https://github.com/alexylon/alexo.io",
+        url: "https://github.com/alexylon/alexo-io",
         homepage: None,
     },
 ];

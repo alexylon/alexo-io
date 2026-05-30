@@ -8,7 +8,7 @@ Type=simple
 User=alex
 Group=alex
 WorkingDirectory=/home/alex/git/alexo-io
-ExecStart=/home/alex/git/alexo-io/target/release/server --port 7777 --dir /home/alex/git/alexo.io/site_public --no-reload
+ExecStart=/home/alex/git/alexo-io/target/release/server --port 7777 --dir /home/alex/git/alexo-io/site_public --no-reload
 Restart=always
 RestartSec=2
 

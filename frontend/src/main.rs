@@ -146,8 +146,12 @@ fn App() -> Element {
         }
         document::Link {
             rel: "icon",
-            r#type: "image/svg+xml",
-            href: asset!("/assets/images/favicon.svg"),
+            r#type: "image/png",
+            href: asset!("/assets/images/favicon.png"),
+        }
+        document::Link {
+            rel: "apple-touch-icon",
+            href: asset!("/assets/images/apple-touch-icon.png"),
         }
         main {
             class: "{theme().css_class()}",

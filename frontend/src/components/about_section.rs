@@ -33,7 +33,7 @@ pub fn AboutSection() -> Element {
             div {
                 class: "about-text reveal",
                 p {
-                    "I build web apps, backend services, and developer tools with clean, \
+                    "I build web applications, backend services, and developer tools with clean, \
                     readable, performant code \u{2014} using "
                     span { class: "accent", "Rust" }
                     " when it\u{2019}s the right tool."

@@ -39,8 +39,8 @@ pub const SKILL_CATEGORIES: &[SkillCategory] = &[
         skills: &["Next.js", "Node.js", "Dioxus"],
     },
     SkillCategory {
-        name: "AI / ML",
-        skills: &["LLM Integration", "MCP", "Vercel AI SDK"],
+        name: "AI & ML",
+        skills: &["LLM integration", "MCP", "Vercel AI SDK"],
     },
     SkillCategory {
         name: "DevOps",
@@ -61,9 +61,10 @@ pub const EXPERIENCE_ENTRIES: &[ExperienceEntry] = &[
         company: "Proxiad",
         period: "Aug 2023 – Present",
         responsibilities: &[
-            "Build frontend applications for a digital publishing suite — Publications Editor, InDesign Plugin, Reader, Configurator, Assets Drive, and a cross-platform mobile app — with React, TypeScript, JavaScript, ExtendScript, Redux, and SCSS.",
+            "Build an AI MCP server in Rust for accessing the company's APIs.",
+            "Develop frontend applications for a digital publishing suite — including Publications Editor, InDesign Plugin, Reader, Configurator, Assets Drive, and a cross-platform mobile application — using React, TypeScript, JavaScript, ExtendScript, Redux, and SCSS.",
             "Maintain Java backend APIs with a focus on coding standards, test coverage, and reliability.",
-            "Partner with UI/UX teams to streamline releases and shorten feature turnaround time.",
+            "Work closely with UI/UX teams to streamline releases and reduce feature turnaround time.",
         ],
     },
     ExperienceEntry {
@@ -71,10 +72,11 @@ pub const EXPERIENCE_ENTRIES: &[ExperienceEntry] = &[
         company: "DXC Technology",
         period: "Apr 2020 – Aug 2023",
         responsibilities: &[
-            "Modernized enterprise components by migrating critical workflows from Java to Rust.",
-            "Developed VP/MS (Visual Product Modeling System) with React, TypeScript, Material UI, and Java, improving product visualization and user workflows.",
-            "Built a full-stack service with AWS SDK, React, TypeScript, and Terraform to integrate cloud infrastructure into customer-facing solutions.",
-            "Developed features for the BMW Group Vulnerability Tool; optimized PostgreSQL schemas and iBATIS data layers, reducing query time by 90% (from 30s to 3s).",
+            "Modernised the Next Gen Product Accelerator by rewriting critical components from Java to Rust.",
+            "Contributed to building an LSP server in Rust for the VP/MS modelling language.",
+            "Developed VP/MS (Visual Product Modelling System) with React, TypeScript, Material UI, and Java, improving product visualisation and user workflows.",
+            "Built a full-stack service with the AWS SDK, React, TypeScript, and Terraform to integrate cloud infrastructure into customer-facing solutions.",
+            "Developed features for the BMW Group Vulnerability Tool and optimised PostgreSQL schemas and iBATIS data layers, reducing query times by 90% (from 30 seconds to 3 seconds).",
         ],
     },
     ExperienceEntry {
@@ -84,7 +86,7 @@ pub const EXPERIENCE_ENTRIES: &[ExperienceEntry] = &[
         responsibilities: &[
             "Built a property management web application with React, Next.js, and GraphQL.",
             "Wrote reusable UI components in TypeScript and Material UI.",
-            "Collaborated with mentors on architecture reviews and code quality, delivering production-ready components.",
+            "Collaborated with mentors on architecture reviews and code quality to deliver production-ready components.",
         ],
     },
 ];
@@ -99,31 +101,31 @@ pub struct ProjectEntry<'a> {
 pub const PROJECTS: &[ProjectEntry] = &[
     ProjectEntry {
         name: "FerroCrypt",
-        description: "Pure Rust library, CLI, and desktop app for encrypting and decrypting files and directories with password-based or key-pair encryption.",
+        description: "A pure Rust library, CLI, and desktop application for encrypting and decrypting files and directories with password-based or key-pair encryption.",
         url: "https://github.com/alexylon/ferrocrypt",
         homepage: Some("https://www.ferrocrypt.app"),
     },
     ProjectEntry {
         name: "Sofos Code",
-        description: "Terminal AI coding assistant built in Rust, with Claude/GPT support, file editing, and MCP integration. Published on crates.io.",
+        description: "A terminal-based AI coding assistant built in Rust, with Claude and GPT support, file editing, and MCP integration. Published on crates.io.",
         url: "https://github.com/alexylon/sofos-code",
         homepage: None,
     },
     ProjectEntry {
         name: "Sofos Web",
-        description: "Multi-model AI chatbot built with React, Next.js, and Material UI, with image analysis and speech-to-text support for OpenAI, Anthropic, and Google models.",
+        description: "A multi-model AI chatbot built with React, Next.js, and Material UI, with image analysis and speech-to-text support for OpenAI, Anthropic, and Google models.",
         url: "https://github.com/alexylon/sofos-web",
         homepage: None,
     },
     ProjectEntry {
         name: "clavirio",
-        description: "Terminal typing tutor built with Rust and ratatui. Practice with built-in lessons or any text file while a virtual keyboard tracks each keystroke.",
+        description: "A terminal-based typing tutor built with Rust and ratatui. Practise with built-in lessons or any text file while a virtual keyboard tracks each keystroke.",
         url: "https://github.com/alexylon/clavirio",
         homepage: Some("https://www.clavir.io"),
     },
     ProjectEntry {
         name: "alexo.io",
-        description: "This website — a full-stack Rust app with a Dioxus/WASM frontend and an axum server, hosted on a Raspberry Pi.",
+        description: "This website — a full-stack Rust application with a Dioxus/WASM frontend and an axum server, hosted on a Raspberry Pi.",
         url: "https://github.com/alexylon/alexo-io",
         homepage: None,
     },
@@ -144,11 +146,11 @@ pub const EDUCATION: &[EducationEntry] = &[
         institution: "MaxPlus",
     },
     EducationEntry {
-        title: "PhD, Theology",
+        title: "PhD in Theology",
         institution: "Sofia University “St. Kliment Ohridski”",
     },
     EducationEntry {
-        title: "M.Eng., Engineering",
+        title: "MEng in Engineering",
         institution: "University of Forestry",
     },
     EducationEntry {
@@ -177,23 +179,23 @@ pub struct Language<'a> {
 pub const LANGUAGES: &[Language] = &[
     Language {
         name: "Bulgarian",
-        level: "(Native)",
+        level: "Native",
     },
     Language {
         name: "English",
-        level: "(C1)",
+        level: "C1",
     },
     Language {
         name: "Italian",
-        level: "(B2)",
+        level: "B2",
     },
     Language {
         name: "Russian",
-        level: "(B1)",
+        level: "B1",
     },
     Language {
         name: "Greek",
-        level: "(A2)",
+        level: "A2",
     },
 ];
 

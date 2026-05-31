@@ -17,7 +17,7 @@ pub fn FooterSection() -> Element {
                     href: "https://github.com/alexylon/alexo-io",
                     target: "_blank",
                     rel: "noopener noreferrer",
-                    "Source"
+                    "Source code"
                 }
             }
         }

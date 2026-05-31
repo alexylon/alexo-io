@@ -9,7 +9,7 @@ pub fn ProjectsSection(projects_section: Signal<Option<Rc<MountedData>>>) -> Ele
             id: "projects",
             onmounted: move |cx| projects_section.set(Some(cx.data())),
             class: "projects-section section",
-            h2 { "Open Source Projects" }
+            h2 { "Open-Source Projects" }
             div {
                 class: "projects-grid",
                 {PROJECTS.iter().map(|project| rsx! {
@@ -39,7 +39,7 @@ pub fn ProjectsSection(projects_section: Signal<Option<Rc<MountedData>>>) -> Ele
                                 href: "{project.url}",
                                 target: "_blank",
                                 rel: "noopener noreferrer",
-                                "Source"
+                                "Source code"
                             }
                             if let Some(homepage) = project.homepage {
                                 {

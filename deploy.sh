@@ -53,19 +53,34 @@ if ! command -v dx >/dev/null 2>&1; then
 fi
 
 # -------------------------
-# Build frontend (WASM)
+# Build frontend (WASM client + fullstack server) and prerender (SSG)
 # -------------------------
-print_status "Bundling Dioxus frontend..."
-if dx bundle --release --package alexo-io; then
-  print_success "Frontend bundle completed."
+# `dx build --ssg` builds both the wasm client bundle and the fullstack server
+# binary side by side under target/dx/.../release/web. We do NOT rely on the
+# CLI's own prerender pass — it is unreliable in dioxus 0.7.3 (the `dx bundle`
+# path has it stubbed out; `dx build --ssg` runs it only intermittently).
+# Instead, prerender.sh drives the freshly built server binary directly to
+# write the static HTML into public/. See prerender.sh for the why.
+print_status "Building Dioxus frontend (client + server)..."
+if dx build --release --web --ssg --package alexo-io; then
+  print_success "Frontend build completed."
 else
-  print_error "dx bundle failed."
+  print_error "dx build failed."
   exit 1
 fi
 
-PUBDIR="$(find target/dx -type d -path '*/release/web/public' 2>/dev/null | head -n1 || true)"
-if [[ -z "${PUBDIR}" ]]; then
-  print_error "Could not find bundled public dir under target/dx/*/release/web/public"
+WEBDIR="$(find target/dx -type d -path '*/release/web' -not -path '*/public' 2>/dev/null | head -n1 || true)"
+if [[ -z "${WEBDIR}" || ! -f "${WEBDIR}/index.html" && ! -d "${WEBDIR}/public" ]]; then
+  print_error "Could not find built web dir under target/dx/*/release/web"
+  exit 1
+fi
+PUBDIR="${WEBDIR}/public"
+
+print_status "Prerendering static routes (SSG)..."
+if ./prerender.sh "${WEBDIR}"; then
+  print_success "Prerender completed."
+else
+  print_error "Prerender failed; not deploying a non-prerendered site."
   exit 1
 fi
 
@@ -104,6 +119,15 @@ cp frontend/assets/images/og-image.png "${STAGE_NEW}/og-image.png"
 # with a broken or empty one.
 if [[ ! -f "${STAGE_NEW}/index.html" ]]; then
   print_error "New build missing index.html; keeping current site and aborting."
+  rm -rf "${STAGE_NEW}"
+  exit 1
+fi
+
+# Guard against a non-prerendered bundle slipping through: a successful SSG
+# build has real markup inside #main, not the empty "<div id=\"main\"></div>"
+# shell. Refuse to deploy the empty SPA shell (it would tank SEO).
+if grep -q '<div id="main"></div>' "${STAGE_NEW}/index.html"; then
+  print_error "index.html has an empty #main — prerender did not take. Aborting."
   rm -rf "${STAGE_NEW}"
   exit 1
 fi

@@ -1,10 +1,13 @@
 use crate::components::data::PROFILE;
 use dioxus::prelude::*;
 
+// Career start: September 2019 (month index 8). Drives the "N+ years" figure.
+const CAREER_START_YEAR: u32 = 2019;
+const CAREER_START_MONTH0: u32 = 8;
+
 #[component]
 pub fn HeaderSection() -> Element {
-    let now = js_sys::Date::new_0();
-    let years = now.get_full_year().saturating_sub(2019) - if now.get_month() < 8 { 1 } else { 0 };
+    let years = crate::years_since(CAREER_START_YEAR, CAREER_START_MONTH0);
 
     rsx! {
         section {

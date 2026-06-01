@@ -7,7 +7,50 @@ mod theme_store;
 use components::*;
 
 fn main() {
-    LaunchBuilder::new().launch(App);
+    dioxus::LaunchBuilder::new()
+        // server_only! compiles to () on the web build. On the server build it
+        // sets up incremental rendering into public/, which is what `--ssg` uses
+        // to pre-render the routes.
+        .with_cfg(server_only! {
+            ServeConfig::builder()
+                .incremental(
+                    dioxus::server::IncrementalRendererConfig::new()
+                        // Render into the `public/` dir next to the server binary.
+                        .static_dir(
+                            std::env::current_exe()
+                                .expect("server binary path is knowable at build time")
+                                .parent()
+                                .expect("server binary path has a parent directory")
+                                .join("public"),
+                        )
+                        .clear_cache(false),
+                )
+                .enable_out_of_order_streaming()
+        })
+        .launch(App);
+}
+
+#[derive(Clone, Routable, PartialEq)]
+enum Route {
+    #[route("/")]
+    Home {},
+}
+
+/// At build time the CLI calls this to learn which routes to pre-render. The
+/// endpoint name must be exactly `static_routes` — that's what the CLI looks for.
+#[server(endpoint = "static_routes")]
+async fn static_routes() -> Result<Vec<String>, ServerFnError> {
+    Ok(Route::static_routes()
+        .iter()
+        .map(ToString::to_string)
+        .collect())
+}
+
+#[component]
+fn App() -> Element {
+    rsx! {
+        Router::<Route> {}
+    }
 }
 
 #[derive(Clone, Copy, PartialEq)]
@@ -17,10 +60,34 @@ enum Theme {
 }
 
 impl Theme {
+    /// localStorage key for the saved choice. prerender.sh's pre-paint script
+    /// reads the same key — keep them in sync.
+    #[cfg(target_arch = "wasm32")]
+    const STORAGE_KEY: &'static str = "theme";
+
     fn css_class(&self) -> &'static str {
         match self {
             Theme::Dark => "theme-dark",
             Theme::Light => "theme-light",
+        }
+    }
+
+    /// Inverse of `from_storage_value` — change both together, and mirror the
+    /// values in prerender.sh's pre-paint script.
+    #[cfg(target_arch = "wasm32")]
+    fn storage_value(&self) -> &'static str {
+        match self {
+            Theme::Dark => "dark",
+            Theme::Light => "light",
+        }
+    }
+
+    #[cfg(target_arch = "wasm32")]
+    fn from_storage_value(value: &str) -> Option<Self> {
+        match value {
+            "dark" => Some(Theme::Dark),
+            "light" => Some(Theme::Light),
+            _ => None,
         }
     }
 
@@ -46,51 +113,105 @@ impl Theme {
     }
 }
 
+/// Smooth scroll unless the user prefers reduced motion (always Smooth on the
+/// server build, where only the client scrolls).
 pub(crate) fn preferred_scroll_behavior() -> ScrollBehavior {
-    if let Some(window) = web_sys::window() {
-        if let Ok(Some(mq)) = window.match_media("(prefers-reduced-motion: reduce)") {
-            if mq.matches() {
-                return ScrollBehavior::Instant;
+    #[cfg(target_arch = "wasm32")]
+    {
+        if let Some(window) = web_sys::window() {
+            if let Ok(Some(mq)) = window.match_media("(prefers-reduced-motion: reduce)") {
+                if mq.matches() {
+                    return ScrollBehavior::Instant;
+                }
             }
         }
     }
     ScrollBehavior::Smooth
 }
 
-fn get_system_theme() -> Theme {
-    use web_sys::window;
-
-    if let Some(window) = window() {
-        if let Ok(media_query) = window.match_media("(prefers-color-scheme: dark)") {
-            if let Some(media_query) = media_query {
-                if media_query.matches() {
-                    return Theme::Dark;
-                }
-            }
-        }
+/// Today's `(year, month0)`, month 0-indexed. Computed per-target so the
+/// server-prerendered value matches the client's on hydration.
+fn current_year_month0() -> (u32, u32) {
+    #[cfg(target_arch = "wasm32")]
+    {
+        let now = js_sys::Date::new_0();
+        (now.get_full_year(), now.get_month())
     }
+    #[cfg(not(target_arch = "wasm32"))]
+    {
+        const SECS_PER_DAY: u64 = 86_400;
+        const EPOCH_YEAR: i64 = 1970;
 
+        let is_leap = |y: i64| (y % 4 == 0 && y % 100 != 0) || y % 400 == 0;
+
+        // Walk forward from the epoch year-by-year then month-by-month, to
+        // avoid a chrono dependency.
+        let secs = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .map(|d| d.as_secs())
+            .unwrap_or(0);
+        let mut days = (secs / SECS_PER_DAY) as i64;
+
+        let mut year = EPOCH_YEAR;
+        loop {
+            let days_in_year = if is_leap(year) { 366 } else { 365 };
+            if days < days_in_year {
+                break;
+            }
+            days -= days_in_year;
+            year += 1;
+        }
+
+        let feb = if is_leap(year) { 29 } else { 28 };
+        let month_lengths = [31, feb, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+        let mut month0 = 0u32;
+        for len in month_lengths {
+            if days < len {
+                break;
+            }
+            days -= len;
+            month0 += 1;
+        }
+
+        (year as u32, month0)
+    }
+}
+
+pub(crate) fn current_year() -> u32 {
+    current_year_month0().0
+}
+
+/// Whole years since `start_year`/`start_month0`, counting a year only once its
+/// anniversary month is reached. Saturates at 0 for a future start date.
+pub(crate) fn years_since(start_year: u32, start_month0: u32) -> u32 {
+    let (year, month0) = current_year_month0();
+    let mut elapsed = year.saturating_sub(start_year);
+    if month0 < start_month0 {
+        elapsed = elapsed.saturating_sub(1);
+    }
+    elapsed
+}
+
+/// Fixed default so the server render and the client's first render agree (no
+/// hydration mismatch); the client switches to the resolved theme just after.
+fn initial_theme() -> Theme {
     Theme::Light
 }
 
 #[component]
-fn App() -> Element {
-    let mut theme = use_signal(|| get_system_theme());
+fn Home() -> Element {
+    #[cfg_attr(not(target_arch = "wasm32"), allow(unused_mut))]
+    let mut theme = use_signal(initial_theme);
 
-    // Load persisted theme, then reveal the page
+    // After hydration, switch from the default to the saved/OS theme. Running
+    // here (not at first render) is what keeps server and client in sync.
     use_effect(move || {
-        spawn(async move {
-            if let Some(saved) = theme_store::load_theme().await {
-                theme.set(saved);
+        #[cfg(target_arch = "wasm32")]
+        {
+            if let Some(t) = theme_store::resolve_theme() {
+                theme.set(t);
             }
-            if let Some(window) = web_sys::window() {
-                if let Some(document) = window.document() {
-                    if let Some(body) = document.body() {
-                        let _ = body.set_attribute("class", "ready");
-                    }
-                }
-            }
-        });
+        }
     });
 
     let mut top_element: Signal<Option<Rc<MountedData>>> = use_signal(|| None);

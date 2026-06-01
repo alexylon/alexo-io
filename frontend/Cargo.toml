@@ -4,27 +4,27 @@ version = "0.3.1"
 edition = "2021"
 
 [dependencies]
-dioxus = { version = "0.7.3", features = ["web"] }
+dioxus = { version = "0.7.3", features = ["fullstack", "router"] }
 manganis = "0.7.3"
+serde = { version = "1", features = ["derive"] }
+
+# Browser-only crates. These compile to wasm for the client build and are
+# absent from the native server build used for SSG prerendering, so any call
+# into them on the render path must be cfg(target_arch = "wasm32")-gated.
+[target.'cfg(target_arch = "wasm32")'.dependencies]
 web-sys = { version = "0.3", features = [
     "MediaQueryList",
     "DomRect",
     "KeyboardEvent",
     "HtmlElement",
     "NodeList",
-    "IdbFactory",
-    "IdbOpenDbRequest",
-    "IdbDatabase",
-    "IdbTransaction",
-    "IdbObjectStore",
-    "IdbRequest",
-    "IdbTransactionMode",
-    "DomStringList",
+    "Storage",
 ] }
 wasm-bindgen = "0.2"
 wasm-bindgen-futures = "0.4"
 js-sys = "0.3"
 
 [features]
-default = ["web"]
+default = []
 web = ["dioxus/web"]
+server = ["dioxus/server"]

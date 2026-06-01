@@ -3,7 +3,9 @@
    Tokens are declared on `body:has(main.theme-dark)` (not on the .theme-dark
    element itself) so that body-level pseudo-elements — the grain and glow
    layers — inherit them too. Custom properties only inherit downward, and
-   <body> is an ancestor of <main>. */
+   <body> is an ancestor of <main>. The theme class lives on <main>, driven by
+   the Dioxus signal (see nav_section.rs); the server prerenders Light, and the
+   client effect corrects it post-hydration. */
 
 body:has(main.theme-dark) {
     color-scheme: dark;

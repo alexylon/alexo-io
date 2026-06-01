@@ -13,15 +13,16 @@ pub mod scroll_to_top;
 pub mod skills_section;
 pub mod timeline_card;
 
-use wasm_bindgen::closure::Closure;
-use wasm_bindgen::JsCast;
-
+// Removes the window "scroll" listener when the owning component unmounts.
+#[cfg(target_arch = "wasm32")]
 pub(crate) struct ScrollCleanup {
-    pub closure: Closure<dyn FnMut()>,
+    pub closure: wasm_bindgen::closure::Closure<dyn FnMut()>,
 }
 
+#[cfg(target_arch = "wasm32")]
 impl Drop for ScrollCleanup {
     fn drop(&mut self) {
+        use wasm_bindgen::JsCast;
         if let Some(window) = web_sys::window() {
             let _ = window.remove_event_listener_with_callback(
                 "scroll",

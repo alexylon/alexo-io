@@ -2,7 +2,7 @@ use dioxus::prelude::*;
 
 #[component]
 pub fn FooterSection() -> Element {
-    let year = js_sys::Date::new_0().get_full_year();
+    let year = crate::current_year();
 
     rsx! {
         footer {

@@ -23,7 +23,7 @@ pub fn AboutSection() -> Element {
                     },
                     img {
                         class: "about-photo",
-                        src: asset!("/assets/images/profilepic.jpg"),
+                        src: asset!("/assets/images/profilepic.jpeg"),
                         alt: "Alexander Alexandrov",
                         width: "158",
                         height: "158",
@@ -89,7 +89,7 @@ pub fn AboutSection() -> Element {
                     "\u{00D7}"
                 }
                 img {
-                    src: asset!("/assets/images/profilepic.jpg"),
+                    src: asset!("/assets/images/profilepic.jpeg"),
                     alt: "Alexander Alexandrov",
                     onclick: move |e| {
                         e.stop_propagation();

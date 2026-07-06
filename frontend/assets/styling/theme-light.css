@@ -1,36 +1,44 @@
-/* "Paper" — light theme. Warm off-white with a deep ember accent.
+/* Light theme: cool paper, near-black ink, deep wine accent.
 
-   Tokens are declared on `body:has(main.theme-light)` so body-level
-   pseudo-elements (grain, glow) inherit them — see theme-dark.css. */
+   Tokens are declared on `body:has(main.theme-light)` (not on the .theme-light
+   element itself) so that body-level styling inherits them too. Custom
+   properties only inherit downward, and <body> is an ancestor of <main>. The
+   theme class lives on <main>, driven by the Dioxus signal (see
+   nav_section.rs); the server prerenders Light, and the client effect corrects
+   it post-hydration. */
 
 body:has(main.theme-light) {
     color-scheme: light;
-    background: #f5f4ef;
-    color: #3d3f45;
+    background: #eef0eb;
+    color: #33383d;
 
     /* Surfaces */
-    --bg: #f5f4ef;
-    --surface: #ffffff;
-    --surface-2: #efeee8;
+    --bg: #eef0eb;
+    --surface: #f7f8f4;
 
     /* Hairlines */
-    --line: rgba(24, 22, 20, 0.10);
-    --line-strong: rgba(24, 22, 20, 0.18);
+    --line: rgba(26, 29, 33, 0.14);
+    --line-strong: rgba(26, 29, 33, 0.26);
 
     /* Text */
-    --text-strong: #1b1c1f;
-    --text: #3d3f45;
-    --text-muted: #64666d;
-    --text-faint: #9a9ca2;
+    --text-strong: #1a1d21;
+    --text: #33383d;
+    --text-muted: #5f656b;
+    --text-faint: #8f959b;
 
-    /* Accent — burnt ember */
-    --accent: #c0491a;
-    --glow: rgba(192, 73, 26, 0.10);
+    /* Accent — wine */
+    --accent: #8e2338;
+    --accent-deep: #6e1626;
+    --accent-wash: rgba(142, 35, 56, 0.07);
+
+    /* Gold — decorative only (lines, glints), never text: contrast is below AA */
+    --gold: #a3782a;
 
     /* Effects */
-    --shadow: rgba(40, 33, 24, 0.13);
-    --overlay: rgba(245, 244, 239, 0.92);
-    --nav-bg: rgba(245, 244, 239, 0.72);
-    --nav-bg-solid: rgba(247, 246, 242, 0.96);
+    --glow: rgba(142, 35, 56, 0.09);
     --grain-opacity: 0.05;
+    --shadow: rgba(30, 33, 30, 0.14);
+    --overlay: rgba(238, 240, 235, 0.93);
+    --nav-bg: rgba(238, 240, 235, 0.82);
+    --nav-bg-solid: rgba(240, 242, 237, 0.97);
 }

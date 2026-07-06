@@ -222,19 +222,46 @@ fn Home() -> Element {
     let contact_section: Signal<Option<Rc<MountedData>>> = use_signal(|| None);
     let active_section: Signal<String> = use_signal(String::new);
 
+    // Variable fonts, split into latin + cyrillic subsets; the browser fetches
+    // per unicode-range.
     let font_css = format!(
         r#"
         @font-face {{
-            font-family: 'Atkinson Hyperlegible Next';
-            src: url('{}') format('opentype');
-            font-weight: 400;
+            font-family: 'Literata';
+            src: url('{}') format('woff2');
+            font-weight: 200 900;
             font-style: normal;
             font-display: swap;
+            unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
         }}
         @font-face {{
-            font-family: 'Podkova';
-            src: url('{}') format('truetype');
-            font-weight: 700;
+            font-family: 'Literata';
+            src: url('{}') format('woff2');
+            font-weight: 200 900;
+            font-style: normal;
+            font-display: swap;
+            unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+        }}
+        @font-face {{
+            font-family: 'Literata';
+            src: url('{}') format('woff2');
+            font-weight: 200 900;
+            font-style: italic;
+            font-display: swap;
+            unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        }}
+        @font-face {{
+            font-family: 'Literata';
+            src: url('{}') format('woff2');
+            font-weight: 200 900;
+            font-style: italic;
+            font-display: swap;
+            unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+        }}
+        @font-face {{
+            font-family: 'IBM Plex Sans';
+            src: url('{}') format('woff2');
+            font-weight: 100 700;
             font-style: normal;
             font-display: swap;
         }}
@@ -246,8 +273,11 @@ fn Home() -> Element {
             font-display: swap;
         }}
         "#,
-        asset!("/assets/fonts/AtkinsonHyperlegibleNext-Regular.otf"),
-        asset!("/assets/fonts/Podkova-Bold.ttf"),
+        asset!("/assets/fonts/Literata-Latin.woff2"),
+        asset!("/assets/fonts/Literata-Cyrillic.woff2"),
+        asset!("/assets/fonts/Literata-Italic-Latin.woff2"),
+        asset!("/assets/fonts/Literata-Italic-Cyrillic.woff2"),
+        asset!("/assets/fonts/IBMPlexSans-Latin.woff2"),
         asset!("/assets/fonts/AtkinsonHyperlegibleMono-Regular.otf"),
     );
 
@@ -276,15 +306,11 @@ fn Home() -> Element {
         }
         main {
             class: "{theme().css_class()}",
-            NavSection { theme, active_section, skills_section, experience_section, projects_section, education_section, contact_section }
+            NavSection { theme, active_section, top_element, skills_section, experience_section, projects_section, education_section, contact_section }
             div {
                 class: "resume",
                 onmounted: move |cx| top_element.set(Some(cx.data())),
-                header {
-                    class: "hero",
-                    HeaderSection {}
-                    AboutSection {}
-                }
+                HeroSection {}
                 SkillsSection { skills_section }
                 ExperienceSection { experience_section }
                 ProjectsSection { projects_section }

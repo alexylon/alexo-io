@@ -1,5 +1,5 @@
 use crate::components::data::CERTIFICATIONS;
-use crate::components::timeline_card::TimelineCard;
+use crate::components::entry_card::EntryCard;
 use dioxus::prelude::*;
 
 #[component]
@@ -7,12 +7,12 @@ pub fn CertificationsSection() -> Element {
     rsx! {
         section {
             class: "certification-section section",
-            h2 { "Certifications" }
+            h2 { "Certification" }
             div {
-                class: "certification-list",
+                class: "entry-list entry-list-tight",
                 {CERTIFICATIONS.iter().map(|cert| rsx! {
-                    TimelineCard {
-                        card_type: "certification",
+                    EntryCard {
+                        apparatus: rsx! { "{cert.meta}" },
                         title: rsx! {
                             a {
                                 href: "{cert.url}",
@@ -21,7 +21,6 @@ pub fn CertificationsSection() -> Element {
                                 "{cert.title}"
                             }
                         },
-                        meta: rsx! { "{cert.meta}" },
                     }
                 })}
             }

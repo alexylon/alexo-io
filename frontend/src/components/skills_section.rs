@@ -9,13 +9,13 @@ pub fn SkillsSection(skills_section: Signal<Option<Rc<MountedData>>>) -> Element
             id: "skills",
             onmounted: move |cx| skills_section.set(Some(cx.data())),
             class: "skills-section section",
-            h2 { "Technical Skills" }
+            h2 { "Skills" }
             div {
-                class: "skills-categories",
+                class: "skills-rows",
                 {SKILL_CATEGORIES.iter().map(|cat| rsx! {
                     div {
-                        class: "skill-group",
-                        span { class: "skill-group-label", "{cat.name}" }
+                        class: "skill-row",
+                        span { class: "apparatus", "{cat.name}" }
                         div {
                             class: "skills-grid",
                             {cat.skills.iter().map(|skill| rsx! {

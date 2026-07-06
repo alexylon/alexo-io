@@ -2,6 +2,8 @@ use crate::Theme;
 use dioxus::prelude::*;
 use std::rc::Rc;
 
+// Must be in document order — the scroll-spy walks the list and keeps the
+// last section whose top has passed the threshold.
 #[cfg(target_arch = "wasm32")]
 const SECTION_IDS: &[&str] = &["skills", "experience", "projects", "education", "contact"];
 
@@ -88,6 +90,7 @@ fn focus_nav_sibling(_forward: bool) {}
 pub fn NavSection(
     theme: Signal<Theme>,
     active_section: Signal<String>,
+    top_element: Signal<Option<Rc<MountedData>>>,
     skills_section: Signal<Option<Rc<MountedData>>>,
     experience_section: Signal<Option<Rc<MountedData>>>,
     projects_section: Signal<Option<Rc<MountedData>>>,
@@ -204,6 +207,18 @@ pub fn NavSection(
                         _ => {}
                     }
                 },
+                button {
+                    r#type: "button",
+                    class: "nav-wordmark",
+                    aria_label: "Scroll to top",
+                    onclick: move |_| async move {
+                        if let Some(el) = top_element.cloned() {
+                            el.scroll_to(crate::preferred_scroll_behavior()).await.ok();
+                        }
+                    },
+                    span { class: "nav-wordmark-full", "Alexander Alexandrov" }
+                    span { class: "nav-wordmark-short", "A\u{00B7}A" }
+                }
                 div {
                     class: "nav-links",
                     NavLink { label: "Skills", section: skills_section, is_active: active == "skills", tabbable: active == "skills" || !has_active }

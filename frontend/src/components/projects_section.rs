@@ -11,31 +11,31 @@ pub fn ProjectsSection(projects_section: Signal<Option<Rc<MountedData>>>) -> Ele
             class: "projects-section section",
             h2 { "Open-Source Projects" }
             div {
-                class: "projects-grid",
+                class: "works-list",
                 {PROJECTS.iter().map(|project| rsx! {
                     article {
-                        class: "project-card",
+                        class: "work",
                         div {
-                            class: "project-card-header",
-                            h3 {
-                                class: "project-card-name",
-                                a {
-                                    class: "project-card-title-link",
-                                    href: "{project.url}",
-                                    target: "_blank",
-                                    rel: "noopener noreferrer",
-                                    "{project.name}"
-                                }
+                            class: "apparatus",
+                            "{project.kind}"
+                        }
+                        h3 {
+                            class: "work-name",
+                            a {
+                                href: "{project.url}",
+                                target: "_blank",
+                                rel: "noopener noreferrer",
+                                "{project.name}"
                             }
                         }
                         p {
-                            class: "project-card-desc",
+                            class: "work-desc",
                             "{project.description}"
                         }
                         div {
-                            class: "project-card-links",
+                            class: "work-links",
                             a {
-                                class: "project-card-link",
+                                class: "work-link",
                                 href: "{project.url}",
                                 target: "_blank",
                                 rel: "noopener noreferrer",
@@ -46,7 +46,7 @@ pub fn ProjectsSection(projects_section: Signal<Option<Rc<MountedData>>>) -> Ele
                                     let display = homepage.trim_start_matches("https://");
                                     rsx! {
                                         a {
-                                            class: "project-card-link",
+                                            class: "work-link",
                                             href: "{homepage}",
                                             target: "_blank",
                                             rel: "noopener noreferrer",

@@ -1,15 +1,15 @@
 /* ============================================================================
-   alexo.io — "Ink & Ember"
-   A refined engineering-editorial design system.
+   alexo.io
 
-   Voices:
-     · Serif (Podkova)            — the name and titles. Editorial gravitas.
-     · Mono  (Atkinson Mono)      — labels, nav, metadata, chips. The structural,
-                                    "engineer's" voice.
-     · Sans  (Atkinson Next)      — body copy. The reading voice.
+   Layout: a left margin rail (the "apparatus") carries section labels, dates,
+   and other metadata; the main column is a single reading measure.
 
-   One accent (ember), used surgically against true-neutral ink tones.
-   Concrete colours live in theme-dark.css / theme-light.css.
+   Type roles: Literata (serif) for display — name, titles, email; IBM Plex
+   Sans for reading text; Atkinson Mono for rail labels, dates, nav, links.
+
+   Concrete colours live in theme-dark.css / theme-light.css, declared on
+   body:has(main.theme-X). The theme class on <main> is set by the Dioxus
+   signal and, pre-hydration, by prerender.sh's no-flash script.
    ========================================================================== */
 
 :root {
@@ -22,23 +22,25 @@
     --space-6: 32px;
     --space-7: 48px;
     --space-8: 64px;
-    --space-9: 96px;
 
-    /* Layout */
-    --max-width: 66rem;
-    --content-padding: clamp(var(--space-5), 5vw, var(--space-8));
-    --section-gap: clamp(3.75rem, 8vw, 6rem);
-    --nav-height: 60px;
+    /* Layout: [ rail | gutter | reading column ] — the rail block is the
+       apparatus margin; the vertical rule runs down the middle of the gutter. */
+    --rail-w: 10.5rem;
+    --rail-gap: clamp(1.75rem, 4vw, 3.25rem);
+    --rail-block: calc(var(--rail-w) + var(--rail-gap));
+    --max-width: 58rem;
+    --content-padding: clamp(var(--space-5), 5vw, var(--space-7));
+    --section-gap: clamp(3.75rem, 8vw, 5.5rem);
+    --nav-height: 56px;
 
     /* Radii */
-    --radius-sm: 6px;
-    --radius-md: 10px;
-    --radius-lg: 16px;
+    --radius-sm: 4px;
+    --radius-md: 8px;
 
     /* Type */
-    --font-serif: 'Podkova', 'Iowan Old Style', Georgia, serif;
+    --font-serif: 'Literata', 'Iowan Old Style', Georgia, 'Times New Roman', serif;
+    --font-sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
     --font-mono: 'Atkinson Hyperlegible Mono', ui-monospace, 'SF Mono', Menlo, monospace;
-    --font-sans: 'Atkinson Hyperlegible Next', system-ui, sans-serif;
 
     /* Easing & timing */
     --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
@@ -49,7 +51,6 @@
 
 * {
     box-sizing: border-box;
-    text-rendering: geometricPrecision;
     -webkit-text-size-adjust: 100%;
     -moz-text-size-adjust: 100%;
     text-size-adjust: 100%;
@@ -66,22 +67,20 @@ body {
     font-family: var(--font-sans);
     font-size: 1rem;
     font-weight: 400;
-    line-height: 1.7;
-    letter-spacing: 0.005em;
+    line-height: 1.62;
+    letter-spacing: 0.004em;
     word-wrap: break-word;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     transition: background-color var(--t-slow), color var(--t-slow);
 }
 
-/* ─── Background atmosphere ───────────────────────────────────────────────
-   A whisper-faint film grain over the base colour, plus a soft ember glow
-   anchored behind the masthead. Fixed, inert, and barely-there. */
+/* ─── Background atmosphere ─────────────────────────────────────────────── */
 
-/* Film grain sits at z-index:-1 — behind all content but above the page
-   background. Deliberately NO mix-blend-mode: a blend mode here forces an
-   isolation group that blanks the nav's backdrop-filter sample (the nav would
-   go flat-transparent and let scrolling text bleed through). */
+/* Film grain sits at z-index:0 — behind all content (main is z-index:1) but
+   above the page background. Deliberately NO mix-blend-mode: a blend mode here
+   forces an isolation group that blanks the nav's backdrop-filter sample (the
+   nav would go flat-transparent and let scrolling text bleed through). */
 body::before {
     content: "";
     position: fixed;
@@ -94,9 +93,7 @@ body::before {
 
 /* main is a stacking context (z-index:1) so it sits above the grain layer and
    so the hero glow (.hero::before, z-index:-1) renders above the page
-   background instead of being painted over by it. The nav's frosted
-   backdrop-filter is unaffected — that broke from mix-blend-mode, not from
-   this stacking context. */
+   background instead of being painted over by it. */
 main {
     position: relative;
     z-index: 1;
@@ -112,49 +109,45 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
     font-family: var(--font-serif);
-    font-weight: 700;
-    font-size: clamp(2.2rem, 5vw, 3rem);
-    line-height: 1.06;
-    letter-spacing: -0.02em;
+    font-weight: 600;
+    font-size: clamp(1.85rem, 3.6vw, 2.35rem);
+    line-height: 1.08;
+    letter-spacing: -0.012em;
     color: var(--text-strong);
     text-wrap: balance;
 }
 
-/* Numbered section header: "01  EXPERIENCE ───────────────" */
+/* Section label in the margin rail. Stays in normal flow (pulled sideways
+   with a negative margin) so the section's content — and the content's own
+   marginal apparatus — starts on the row below it, never colliding. */
 h2 {
-    display: flex;
-    align-items: center;
-    gap: var(--space-4);
-    counter-increment: section;
+    width: var(--rail-w);
+    margin-left: calc(-1 * var(--rail-block));
+    margin-bottom: var(--space-5);
+    text-align: right;
     font-family: var(--font-mono);
     font-weight: 400;
-    font-size: 0.72rem;
+    font-size: 0.68rem;
+    line-height: 1.6;
     text-transform: uppercase;
-    letter-spacing: 0.24em;
-    color: var(--text-muted);
-    margin-bottom: var(--space-6);
-}
-
-h2::before {
-    content: counter(section, decimal-leading-zero);
+    letter-spacing: 0.22em;
     color: var(--accent);
-    font-size: 0.78rem;
-    letter-spacing: 0.05em;
-    font-variant-numeric: tabular-nums;
 }
 
-h2::after {
+/* Compensate the trailing letter-spacing so the last glyph, not the tracking
+   gap, sits on the right edge. */
+h2::after,
+.colophon-label::after {
     content: "";
-    flex: 1;
-    height: 1px;
-    background: var(--line);
+    display: inline-block;
+    margin-left: -0.22em;
 }
 
 h3 {
     font-family: var(--font-serif);
-    font-weight: 700;
-    font-size: 1.22rem;
-    letter-spacing: -0.01em;
+    font-weight: 600;
+    font-size: 1.16rem;
+    letter-spacing: -0.005em;
     color: var(--text-strong);
     text-wrap: balance;
 }
@@ -185,7 +178,7 @@ a {
 /* ─── Layout ───────────────────────────────────────────────────────────── */
 
 .resume {
-    counter-reset: section;
+    position: relative;
     max-width: var(--max-width);
     margin: 0 auto;
     padding: calc(var(--nav-height) + var(--space-8)) var(--content-padding) var(--space-8);
@@ -194,14 +187,56 @@ a {
     gap: var(--section-gap);
 }
 
+/* Continuous hairline down the middle of the gutter; accent at the head,
+   fading out at the foot. */
+.resume::before {
+    content: "";
+    position: absolute;
+    top: calc(var(--nav-height) + var(--space-8));
+    bottom: var(--space-6);
+    left: calc(var(--content-padding) + var(--rail-w) + var(--rail-gap) / 2);
+    width: 1px;
+    background: linear-gradient(
+        to bottom,
+        var(--accent) 0,
+        var(--line) 160px,
+        var(--line) calc(100% - 200px),
+        transparent 100%
+    );
+}
+
+/* Every section indents to the reading column; rail content (h2, .apparatus)
+   is positioned absolutely into the margin. */
+.section,
+.hero,
+.footer-section {
+    position: relative;
+    padding-left: var(--rail-block);
+}
+
 .section {
     scroll-margin-top: calc(var(--nav-height) + var(--space-5));
+}
+
+/* Marginal metadata (dates, project kinds): right-aligned against the gutter,
+   top-aligned with its entry's first line. */
+.apparatus {
+    position: absolute;
+    right: calc(100% + var(--rail-gap));
+    top: 0.30em;
+    width: var(--rail-w);
+    text-align: right;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    line-height: 1.7;
+    letter-spacing: 0.02em;
+    color: var(--text-muted);
 }
 
 /* ─── Navigation ──────────────────────────────────────────────────────── */
 
 /* Solid-ish base so the bar is never see-through if backdrop-filter is
-   unavailable; the frosted-glass treatment is layered on only where supported. */
+   unavailable; the frosted treatment is layered on only where supported. */
 .fixed-nav {
     position: fixed;
     top: 0;
@@ -216,8 +251,8 @@ a {
 @supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
     .fixed-nav {
         background: var(--nav-bg);
-        -webkit-backdrop-filter: blur(20px) saturate(150%);
-        backdrop-filter: blur(20px) saturate(150%);
+        -webkit-backdrop-filter: blur(14px) saturate(140%);
+        backdrop-filter: blur(14px) saturate(140%);
     }
 }
 
@@ -230,6 +265,31 @@ a {
     margin: 0 auto;
     padding: 0 var(--content-padding);
     height: var(--nav-height);
+}
+
+.nav-wordmark {
+    appearance: none;
+    background: none;
+    border: none;
+    padding: var(--space-2) 0;
+    cursor: pointer;
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--text-strong);
+    white-space: nowrap;
+    transition: color var(--t-fast);
+}
+
+.nav-wordmark-short {
+    display: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .nav-wordmark:hover {
+        color: var(--accent);
+    }
 }
 
 .nav-links {
@@ -251,9 +311,9 @@ a {
     cursor: pointer;
     font-family: var(--font-mono);
     font-weight: 400;
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     text-transform: uppercase;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.14em;
     white-space: nowrap;
     padding: var(--space-2) 2px;
     color: var(--text-muted);
@@ -311,152 +371,118 @@ a {
 
 @media (hover: hover) and (pointer: fine) {
     .theme-toggle:hover {
-        background-color: var(--surface-2);
+        background-color: var(--surface);
         border-color: var(--line);
     }
 }
 
-/* ─── Hero / Masthead ─────────────────────────────────────────────────── */
+/* ─── Masthead ────────────────────────────────────────────────────────── */
 
-.hero {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-6);
-    padding-top: var(--space-4);
-}
-
-/* Ember glow anchored to the masthead — scrolls away with the hero rather
-   than following the viewport. z-index:-1 keeps it behind hero content;
-   .hero is intentionally NOT a stacking context so the photo overlay still
-   layers above the nav. */
+/* Glow anchored to the masthead — scrolls away with the hero. z-index:-1
+   keeps it behind hero content but above the page background and grain
+   (resolved against main's stacking context). */
 .hero::before {
     content: "";
     position: absolute;
-    top: -170px;
+    top: -180px;
     left: 50%;
-    width: min(100%, 820px);
-    height: 480px;
+    width: min(110%, 860px);
+    height: 500px;
     transform: translateX(-50%);
     background: radial-gradient(closest-side, var(--glow) 0%, transparent 100%);
     z-index: -1;
     pointer-events: none;
 }
 
-.header-section {
+.hero-rail {
+    position: absolute;
+    left: 0;
+    top: 0.4rem;
+    width: var(--rail-w);
     display: flex;
     flex-direction: column;
+    align-items: flex-end;
     gap: var(--space-4);
-}
-
-.hero-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-3);
-    font-family: var(--font-mono);
-    font-size: 0.74rem;
-    text-transform: uppercase;
-    letter-spacing: 0.24em;
-    color: var(--accent);
-}
-
-.hero-eyebrow::before {
-    content: "";
-    width: 28px;
-    height: 1px;
-    background: var(--accent);
-    opacity: 0.7;
-}
-
-.hero-meta {
-    font-family: var(--font-mono);
-    font-size: 0.92rem;
-    letter-spacing: 0.01em;
-    color: var(--text-muted);
-}
-
-/* About: portrait + intro + quick links */
-.about-block {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: center;
-    gap: clamp(var(--space-5), 4vw, var(--space-7));
-}
-
-.about-photo-frame {
-    position: relative;
-    flex-shrink: 0;
-    width: 158px;
-    height: 158px;
 }
 
 .about-photo-button {
     appearance: none;
-    position: relative;
-    z-index: 1;
     display: block;
     width: 100%;
-    height: 100%;
     padding: 0;
     border: 0;
-    border-radius: var(--radius-lg);
     background: transparent;
     cursor: zoom-in;
 }
 
-.about-photo-frame::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    transform: translate(10px, 10px);
-    border: 1px solid var(--accent);
-    border-radius: var(--radius-lg);
-    opacity: 0.35;
-    transition: transform var(--t-base), opacity var(--t-base);
-    z-index: 0;
-}
-
 .about-photo {
-    position: relative;
-    z-index: 1;
+    display: block;
     width: 100%;
-    height: 100%;
-    border-radius: var(--radius-lg);
+    height: auto;
+    aspect-ratio: 1;
     object-fit: cover;
-    cursor: zoom-in;
     border: 1px solid var(--line-strong);
+    border-radius: var(--radius-md);
     background: var(--surface);
-    box-shadow: 0 10px 30px var(--shadow);
-    transition: border-color var(--t-base), transform var(--t-base);
+    box-shadow: 0 8px 26px var(--shadow);
+    transition: border-color var(--t-base), box-shadow var(--t-base);
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .about-photo-frame:hover::before {
-        transform: translate(14px, 14px);
-        opacity: 0.6;
-    }
-
-    .about-photo-frame:hover .about-photo,
+    .about-photo-button:hover .about-photo,
     .about-photo-button:focus-visible .about-photo {
         border-color: var(--accent);
-        transform: translate(-2px, -2px);
+        box-shadow: 0 12px 32px var(--shadow);
     }
 }
 
-.about-text {
+.hero-docket {
     display: flex;
     flex-direction: column;
-    gap: var(--space-5);
+    align-items: flex-end;
+    gap: 2px;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-align: right;
 }
 
-.about-text p {
-    font-size: 1.14rem;
-    line-height: 1.65;
+.hero-body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.hero-cyrillic {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--accent);
+    margin-bottom: var(--space-2);
+}
+
+.hero-role {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: clamp(1.1rem, 2.4vw, 1.3rem);
+    line-height: 1.35;
+    letter-spacing: 0.002em;
+    color: var(--text-muted);
+    margin-top: var(--space-3);
+}
+
+.hero-lede {
+    font-size: 1.12rem;
+    line-height: 1.6;
     color: var(--text);
-    max-width: 46ch;
+    max-width: 34em;
+    margin-top: var(--space-5);
 }
 
-.about-text p .accent {
+.hero-lede .accent {
     color: var(--text-strong);
     text-decoration: underline;
     text-decoration-color: var(--accent);
@@ -467,16 +493,22 @@ a {
 .hero-links {
     display: flex;
     flex-wrap: wrap;
+    align-items: baseline;
     gap: var(--space-2) var(--space-5);
+    margin-top: var(--space-5);
 }
 
 .hero-link {
     position: relative;
     font-family: var(--font-mono);
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     letter-spacing: 0.02em;
     color: var(--text-muted);
     transition: color var(--t-fast);
+}
+
+.hero-link.hero-link-email {
+    color: var(--accent);
 }
 
 .hero-link::after {
@@ -495,12 +527,16 @@ a {
         color: var(--text-strong);
     }
 
+    .hero-link.hero-link-email:hover {
+        color: var(--accent-deep);
+    }
+
     .hero-link:hover::after {
         right: 0;
     }
 }
 
-/* Fullscreen image overlay */
+/* Fullscreen portrait overlay */
 .image-overlay {
     position: fixed;
     inset: 0;
@@ -543,36 +579,197 @@ a {
     to { opacity: 1; }
 }
 
+/* ─── Entries (experience · education · certification) ───────────────── */
+
+.entry-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-7);
+}
+
+.entry-list-tight {
+    gap: var(--space-5);
+}
+
+.entry {
+    position: relative;
+}
+
+.entry-title a {
+    color: inherit;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .entry-title a:hover {
+        color: var(--accent);
+    }
+}
+
+.entry-org {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 0.97rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.entry ul {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-3) 0 0;
+    max-width: 62ch;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.entry li {
+    position: relative;
+    padding-left: 1.35em;
+    font-size: 0.97rem;
+    line-height: 1.65;
+    color: var(--text);
+}
+
+.entry li::before {
+    content: "\2013";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--text-faint);
+}
+
+/* ─── Works (open-source projects) ────────────────────────────────────── */
+
+.works-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.work {
+    position: relative;
+    /* Own stacking context so the hover wash (::after, z-index:-1) stays
+       inside this row instead of dropping behind siblings. */
+    z-index: 0;
+    padding: var(--space-5) 0;
+}
+
+/* Hover wash painted by a pseudo-element so the row's geometry — and the
+   apparatus anchored to it — never moves. */
+.work::after {
+    content: "";
+    position: absolute;
+    top: var(--space-2);
+    bottom: var(--space-2);
+    left: calc(-1 * var(--space-4));
+    right: calc(-1 * var(--space-4));
+    z-index: -1;
+    border-radius: var(--radius-md);
+    background: transparent;
+    transition: background-color var(--t-base), box-shadow var(--t-base);
+    pointer-events: none;
+}
+
+/* The first row has no top padding, so its wash reaches above the row box. */
+.work:first-child::after {
+    top: calc(-1 * var(--space-4));
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .work:hover::after {
+        background: var(--surface);
+        box-shadow: 0 12px 32px var(--shadow);
+    }
+}
+
+.work:first-child {
+    padding-top: 0;
+}
+
+.work:first-child .apparatus {
+    top: 0.30em;
+}
+
+.work + .work {
+    border-top: 1px solid var(--line);
+}
+
+.work + .work .apparatus {
+    top: calc(var(--space-5) + 0.30em);
+}
+
+.work-name {
+    font-size: 1.12rem;
+}
+
+.work-name a {
+    color: inherit;
+    transition: color var(--t-fast);
+}
+
+.work-name a:visited {
+    color: inherit;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .work-name a:hover {
+        color: var(--accent);
+    }
+}
+
+.work-desc {
+    margin-top: var(--space-2);
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: var(--text);
+    max-width: 62ch;
+}
+
+.work-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+    margin-top: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    letter-spacing: 0.02em;
+}
+
+.work-link {
+    color: var(--accent);
+}
+
+.work-link::before {
+    content: "\2197\00A0";
+    opacity: 0.7;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .work-link:hover {
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        color: var(--accent-deep);
+    }
+}
+
 /* ─── Skills ──────────────────────────────────────────────────────────── */
 
-.skills-categories {
+.skills-rows {
     display: flex;
     flex-direction: column;
     gap: var(--space-5);
 }
 
-.skill-group {
-    display: grid;
-    grid-template-columns: 11rem 1fr;
-    align-items: baseline;
-    gap: var(--space-4);
-    padding-bottom: var(--space-5);
-    border-bottom: 1px solid var(--line);
+.skill-row {
+    position: relative;
 }
 
-.skill-group:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-}
-
-.skill-group-label {
-    font-family: var(--font-mono);
-    font-size: 0.74rem;
-    font-weight: 400;
+.skill-row .apparatus {
     text-transform: uppercase;
-    letter-spacing: 0.16em;
-    color: var(--text-muted);
-    white-space: nowrap;
+    letter-spacing: 0.1em;
+    font-size: 0.66rem;
+    /* Centred on the first row of pills */
+    top: 8px;
 }
 
 .skills-grid {
@@ -582,415 +779,191 @@ a {
 }
 
 .chip {
-    padding: 5px 11px;
-    font-family: var(--font-mono);
-    font-size: 0.82rem;
-    border: 1px solid var(--line-strong);
-    border-radius: var(--radius-sm);
     display: inline-flex;
     align-items: center;
-    background-color: var(--surface);
+    padding: 4px 12px;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.01em;
     color: var(--text);
-    transition: border-color var(--t-fast), color var(--t-fast), background-color var(--t-fast), transform var(--t-fast), box-shadow var(--t-fast);
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
     user-select: none;
     cursor: default;
+    transition: border-color var(--t-fast), color var(--t-fast), background-color var(--t-fast), transform var(--t-fast), box-shadow var(--t-fast);
 }
 
 @media (hover: hover) and (pointer: fine) {
     .chip:hover {
         border-color: var(--accent);
         color: var(--text-strong);
-        background-color: var(--surface-2);
         transform: translateY(-1px);
         box-shadow: 0 2px 8px var(--shadow);
     }
 }
 
-/* ─── Experience (timeline) ───────────────────────────────────────────── */
-
-.experience-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-7);
-}
-
-.experience-card {
-    position: relative;
-    padding-left: var(--space-6);
-    border-left: 1px solid var(--line-strong);
-}
-
-.experience-card::before {
-    content: "";
-    position: absolute;
-    left: -5px;
-    top: 7px;
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: var(--accent);
-}
-
-/* Current role keeps an extra glow ring to mark "present" */
-.experience-card:first-child::before {
-    box-shadow: 0 0 0 4px var(--glow);
-}
-
-.experience-title {
-    margin-bottom: var(--space-2);
-}
-
-.experience-meta {
-    font-family: var(--font-mono);
-    font-size: 0.82rem;
-    color: var(--text-muted);
-    margin-bottom: var(--space-4);
-    letter-spacing: 0.01em;
-}
-
-.experience-company {
-    color: var(--text);
-}
-
-.experience-card ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    max-width: 70ch;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-}
-
-.experience-card li {
-    position: relative;
-    padding-left: var(--space-5);
-    line-height: 1.6;
-    color: var(--text);
-}
-
-/* A small solid square — not a thin line. A 1–2px line anti-aliases to
-   nothing at fractional display scaling / browser zoom (the "empty bullets"
-   bug); a 6px block always keeps a fully-saturated core. Square also reads as
-   distinct from the round timeline nodes. */
-.experience-card li::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0.6em;
-    width: 5px;
-    height: 5px;
-    border-radius: 1.5px;
-    background: var(--accent);
-}
-
-/* ─── Education & Certifications (light timeline) ─────────────────────── */
-
-.education-list,
-.certification-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-6);
-}
-
-.education-card,
-.certification-card {
-    position: relative;
-    padding-left: var(--space-6);
-    border-left: 1px solid var(--line-strong);
-}
-
-.education-card::before,
-.certification-card::before {
-    content: "";
-    position: absolute;
-    left: -5px;
-    top: 7px;
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: var(--accent);
-}
-
-.education-title,
-.certification-title {
-    margin-bottom: var(--space-1);
-}
-
-.education-meta,
-.certification-meta {
-    font-family: var(--font-mono);
-    font-size: 0.82rem;
-    color: var(--text-muted);
-    letter-spacing: 0.01em;
-}
-
-.certification-title a {
-    color: var(--text-strong);
-    transition: color var(--t-fast);
-}
-
-@media (hover: hover) and (pointer: fine) {
-    .certification-title a:hover {
-        color: var(--accent);
-    }
-}
-
-/* ─── Projects ────────────────────────────────────────────────────────── */
-
-.projects-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-4);
-}
-
-.project-card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    padding: var(--space-5);
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-md);
-    color: inherit;
-    overflow: hidden;
-    transition: border-color var(--t-base), transform var(--t-base), box-shadow var(--t-base), background-color var(--t-base);
-}
-
-/* Top hairline that ignites on hover */
-.project-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: var(--accent);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform var(--t-base);
-}
-
-/* Feature the flagship project across the full row */
-.project-card:first-child {
-    grid-column: 1 / -1;
-}
-
-.project-card:first-child .project-card-name {
-    font-size: 1.45rem;
-}
-
-.project-card:first-child .project-card-desc {
-    font-size: 0.95rem;
-    max-width: 60ch;
-}
-
-@media (hover: hover) and (pointer: fine) {
-    .project-card:hover {
-        border-color: var(--line-strong);
-        transform: translateY(-3px);
-        box-shadow: 0 14px 34px var(--shadow);
-        color: inherit;
-    }
-
-    .project-card:hover::before {
-        transform: scaleX(1);
-    }
-}
-
-.project-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: var(--space-3);
-    margin-bottom: var(--space-3);
-}
-
-.project-card-name {
-    font-family: var(--font-serif);
-    font-weight: 700;
-    font-size: 1.18rem;
-    color: var(--text-strong);
-}
-
-.project-card-title-link {
-    color: inherit;
-    transition: color var(--t-fast);
-}
-
-.project-card-title-link:visited {
-    color: inherit;
-}
-
-.project-card-arrow {
-    flex-shrink: 0;
-    font-family: var(--font-mono);
-    font-size: 0.95rem;
-    color: var(--text-faint);
-    transition: color var(--t-base), transform var(--t-base);
-}
-
-.project-card-arrow:visited {
-    color: var(--text-faint);
-}
-
-@media (hover: hover) and (pointer: fine) {
-    .project-card:hover .project-card-title-link {
-        color: var(--accent);
-    }
-
-    .project-card:hover .project-card-arrow {
-        color: var(--accent);
-        transform: translate(3px, -3px);
-    }
-}
-
-.project-card-desc {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    line-height: 1.6;
-    flex-grow: 1;
-}
-
-.project-card-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-    margin-top: var(--space-4);
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-}
-
-.project-card-link {
-    color: var(--accent);
-    letter-spacing: 0.01em;
-}
-
-.project-card-link::before {
-    content: "↗ ";
-    opacity: 0.7;
-}
-
-@media (hover: hover) and (pointer: fine) {
-    .project-card-link:hover {
-        text-decoration: underline;
-        text-underline-offset: 3px;
-    }
-}
-
 /* ─── Languages ───────────────────────────────────────────────────────── */
 
-.languages-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-}
-
-.language-item {
-    display: inline-flex;
-    align-items: baseline;
-    gap: var(--space-2);
-    padding: var(--space-2) var(--space-4);
-    background: var(--surface);
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--line);
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
+.lang-line {
+    font-size: 1rem;
+    line-height: 2;
     color: var(--text);
 }
 
-.language-level {
-    font-size: 0.72rem;
+.lang-level {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
     color: var(--text-muted);
+    padding-left: 0.35em;
+    text-transform: uppercase;
+}
+
+.lang-line .sep {
+    color: var(--text-faint);
+    padding: 0 0.45em;
 }
 
 /* ─── Contact ─────────────────────────────────────────────────────────── */
 
 .contact-intro {
-    max-width: 58ch;
-    margin-top: calc(var(--space-6) * -0.45);
-    margin-bottom: var(--space-5);
-    color: var(--text-muted);
+    font-size: 1.05rem;
+    color: var(--text);
+    max-width: 33em;
 }
 
-.contact-grid {
+.contact-email {
+    display: inline-block;
+    margin-top: var(--space-4);
+    padding-bottom: 4px;
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--text-strong);
+    text-decoration: none;
+    background-image: linear-gradient(90deg, var(--accent), var(--gold));
+    background-repeat: no-repeat;
+    background-size: 100% 2px;
+    background-position: 0 100%;
+    transition: color var(--t-fast), background-size var(--t-base);
+}
+
+.contact-email:visited {
+    color: var(--text-strong);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .contact-email:hover {
+        color: var(--accent);
+        background-size: 100% 3px;
+    }
+}
+
+.contact-links {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-3);
-}
-
-.contact-card {
-    display: inline-flex;
     align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-3) var(--space-5);
-    border: 1px solid var(--line-strong);
-    border-radius: var(--radius-sm);
-    background-color: transparent;
-    color: var(--text);
+    gap: var(--space-3) var(--space-5);
+    margin-top: var(--space-6);
+}
+
+.contact-link {
+    position: relative;
     font-family: var(--font-mono);
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     letter-spacing: 0.02em;
-    transition: border-color var(--t-fast), color var(--t-fast), background-color var(--t-fast), transform var(--t-fast);
+    color: var(--text-muted);
+    transition: color var(--t-fast);
 }
 
-.contact-card:visited {
-    color: var(--text);
+.contact-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 100%;
+    bottom: -3px;
+    height: 1px;
+    background: var(--accent);
+    transition: right var(--t-base);
 }
 
-/* Résumé is the primary conversion — a filled ember CTA */
-.contact-card.contact-resume {
-    border-color: var(--accent);
-    background-color: var(--accent);
+@media (hover: hover) and (pointer: fine) {
+    .contact-link:hover {
+        color: var(--text-strong);
+    }
+
+    .contact-link:hover::after {
+        right: 0;
+    }
+}
+
+.contact-resume {
+    padding: var(--space-3) var(--space-5);
+    border-radius: var(--radius-sm);
+    background: var(--accent);
+    color: var(--bg);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    transition: background-color var(--t-fast), transform var(--t-fast), box-shadow var(--t-fast);
+}
+
+.contact-resume:visited {
     color: var(--bg);
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .contact-card:hover,
-    .contact-card:visited:hover {
-        border-color: var(--accent);
-        color: var(--text-strong);
-        background-color: var(--surface);
-        transform: translateY(-2px);
-    }
-
-    .contact-card.contact-resume:hover {
-        background-color: var(--accent);
+    .contact-resume:hover {
+        background: var(--accent-deep);
         color: var(--bg);
-        box-shadow: 0 8px 22px var(--glow);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 22px var(--shadow);
     }
 }
 
-/* ─── Footer ──────────────────────────────────────────────────────────── */
+/* ─── Colophon ────────────────────────────────────────────────────────── */
+
+.colophon-label {
+    display: block;
+    width: var(--rail-w);
+    margin-left: calc(-1 * var(--rail-block));
+    margin-bottom: var(--space-5);
+    text-align: right;
+    font-family: var(--font-mono);
+    font-style: normal;
+    font-size: 0.68rem;
+    line-height: 1.6;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--text-muted);
+}
 
 .footer-section {
-    font-family: var(--font-mono);
-    text-align: center;
-    padding-top: var(--space-6);
-    border-top: 1px solid var(--line);
-    color: var(--text-muted);
-    font-size: 0.78rem;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 0.92rem;
     line-height: 1.8;
-    letter-spacing: 0.02em;
+    color: var(--text-muted);
 }
 
 .footer-section p {
-    margin: 2px 0;
+    max-width: 36em;
 }
 
-.footer-badge {
-    color: var(--text-muted);
-}
-
-.footer-badge::before {
-    content: "● ";
-    color: var(--accent);
-    font-size: 0.7em;
-    vertical-align: middle;
+.footer-meta {
+    margin-top: var(--space-3);
+    font-family: var(--font-mono);
+    font-style: normal;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
 }
 
 .footer-section a {
     color: var(--text-muted);
+    text-decoration: underline;
+    text-decoration-color: var(--line-strong);
+    text-underline-offset: 3px;
     transition: color var(--t-fast);
 }
 
@@ -1044,27 +1017,27 @@ a {
     display: none;
 }
 
-/* ─── Motion: orchestrated load reveal ───────────────────────────────────
-   The masthead rises in a short stagger. Sections fade up as they enter the
-   viewport via CSS scroll-driven animation (progressive enhancement only —
-   unsupported browsers simply show everything). All disabled for
-   prefers-reduced-motion. */
+/* ─── Motion ──────────────────────────────────────────────────────────────
+   Masthead load stagger; sections fade up on viewport entry via CSS
+   scroll-driven animation (progressive enhancement — unsupported browsers
+   show everything). All disabled for prefers-reduced-motion. */
 
 @keyframes rise {
-    from { opacity: 0; transform: translateY(18px); }
+    from { opacity: 0; transform: translateY(14px); }
     to   { opacity: 1; transform: none; }
 }
 
 .reveal {
     opacity: 0;
-    animation: rise 0.75s var(--ease-out) both;
+    animation: rise 0.7s var(--ease-out) both;
 }
 
-.header-section .hero-eyebrow.reveal { animation-delay: 0.04s; }
-.header-section h1.reveal           { animation-delay: 0.12s; }
-.header-section .hero-meta.reveal   { animation-delay: 0.20s; }
-.about-photo-button.reveal          { animation-delay: 0.30s; }
-.about-text.reveal                  { animation-delay: 0.38s; }
+.hero-cyrillic.reveal { animation-delay: 0.03s; }
+.hero h1.reveal       { animation-delay: 0.10s; }
+.hero-role.reveal     { animation-delay: 0.17s; }
+.hero-lede.reveal     { animation-delay: 0.25s; }
+.hero-links.reveal    { animation-delay: 0.33s; }
+.hero-rail.reveal     { animation-delay: 0.20s; }
 
 @supports (animation-timeline: view()) {
     @media (prefers-reduced-motion: no-preference) {
@@ -1072,36 +1045,78 @@ a {
             opacity: 0;
             animation: rise linear both;
             animation-timeline: view();
-            animation-range: entry 0% entry 32%;
+            animation-range: entry 0% entry 30%;
         }
     }
 }
 
 /* ─── Responsive ──────────────────────────────────────────────────────── */
 
-@media (max-width: 720px) {
-    .about-block {
-        grid-template-columns: 1fr;
-        justify-items: start;
-        gap: var(--space-6);
+/* Collapse the margin rail into the flow: labels become headings, marginal
+   metadata becomes a line above its entry. */
+@media (max-width: 860px) {
+    .resume::before {
+        display: none;
     }
 
-    .skill-group {
-        grid-template-columns: 1fr;
-        gap: var(--space-3);
+    .section,
+    .hero,
+    .footer-section {
+        padding-left: 0;
     }
 
-    .projects-grid {
-        grid-template-columns: 1fr;
+    h2,
+    .colophon-label {
+        margin-left: 0;
+        width: auto;
+        text-align: left;
+        margin-bottom: var(--space-5);
     }
 
-    .project-card:first-child .project-card-name {
-        font-size: 1.28rem;
+    .apparatus {
+        position: static;
+        width: auto;
+        text-align: left;
+        margin-bottom: 2px;
+    }
+
+    .work + .work .apparatus {
+        top: auto;
+    }
+
+    .hero-rail {
+        position: static;
+        width: auto;
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: var(--space-5);
+        margin-bottom: var(--space-6);
+    }
+
+    .about-photo-button {
+        width: 132px;
+    }
+
+    .hero-docket {
+        align-items: flex-end;
+    }
+
+    .skills-rows {
+        gap: var(--space-5);
     }
 }
 
 /* Shrink the nav so all five sections fit narrow screens without scrolling */
-@media (max-width: 560px) {
+@media (max-width: 640px) {
+    .nav-wordmark-full {
+        display: none;
+    }
+
+    .nav-wordmark-short {
+        display: inline;
+    }
+
     .nav-bar {
         gap: var(--space-3);
         padding: 0 var(--space-3);
@@ -1112,19 +1127,14 @@ a {
     }
 
     .nav-link {
-        font-size: 0.7rem;
+        font-size: 0.68rem;
         letter-spacing: 0.07em;
     }
 }
 
 @media (max-width: 490px) {
     html {
-        font-size: 15px;
-    }
-
-    .about-photo-frame {
-        width: 132px;
-        height: 132px;
+        font-size: 16px;
     }
 }
 
@@ -1144,7 +1154,7 @@ a {
     }
 
     .nav-link {
-        font-size: 0.7rem;
+        font-size: 0.66rem;
         letter-spacing: 0.03em;
     }
 
@@ -1156,6 +1166,16 @@ a {
     .theme-toggle img {
         width: 18px;
         height: 18px;
+    }
+
+    .hero-rail {
+        flex-wrap: wrap;
+        align-items: flex-start;
+    }
+
+    .hero-docket {
+        align-items: flex-start;
+        text-align: left;
     }
 }
 
@@ -1181,16 +1201,68 @@ a {
 /* ─── Print ───────────────────────────────────────────────────────────── */
 
 @media print {
-    body::before,
-    .hero::before,
     .fixed-nav,
     .scroll-to-top,
-    .contact-card.contact-resume {
+    .contact-resume,
+    .image-overlay,
+    body::before,
+    .hero::before {
         display: none !important;
+    }
+
+    body {
+        background: #fff !important;
+        color: #111 !important;
+    }
+
+    main {
+        --bg: #fff;
+        --surface: #fff;
+        --text: #111;
+        --text-strong: #000;
+        --text-muted: #444;
+        --text-faint: #777;
+        --accent: #8e2338;
+        --accent-deep: #6e1626;
+        --gold: #a3782a;
+        --line: #ccc;
+        --line-strong: #999;
+        --shadow: transparent;
     }
 
     .resume {
         padding-top: 0;
+    }
+
+    .resume::before {
+        display: none;
+    }
+
+    /* Print in one column, like the collapsed mobile flow. */
+    .section,
+    .hero,
+    .footer-section {
+        padding-left: 0;
+    }
+
+    h2,
+    .colophon-label {
+        margin-left: 0;
+        width: auto;
+        text-align: left;
+        margin-bottom: var(--space-4);
+    }
+
+    .apparatus {
+        position: static;
+        width: auto;
+        text-align: left;
+    }
+
+    .hero-rail {
+        position: static;
+        width: 132px;
+        margin-bottom: var(--space-5);
     }
 
     .reveal,

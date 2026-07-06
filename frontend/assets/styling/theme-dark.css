@@ -1,40 +1,41 @@
-/* "Ink" — dark theme. True-neutral charcoal with a single ember accent.
+/* Dark theme: blue-black page, wine accent raised to a rose that keeps AA
+   contrast for small text.
 
-   Tokens are declared on `body:has(main.theme-dark)` (not on the .theme-dark
-   element itself) so that body-level pseudo-elements — the grain and glow
-   layers — inherit them too. Custom properties only inherit downward, and
-   <body> is an ancestor of <main>. The theme class lives on <main>, driven by
-   the Dioxus signal (see nav_section.rs); the server prerenders Light, and the
-   client effect corrects it post-hydration. */
+   Tokens are declared on `body:has(main.theme-dark)` so body-level styling
+   inherits them — see theme-light.css for the mechanism. */
 
 body:has(main.theme-dark) {
     color-scheme: dark;
-    background: #0b0c0e;
-    color: #c9cbd1;
+    background: #151924;
+    color: #c8ccd2;
 
     /* Surfaces */
-    --bg: #0b0c0e;
-    --surface: #121419;
-    --surface-2: #181a20;
+    --bg: #151924;
+    --surface: #1d222e;
 
     /* Hairlines */
-    --line: rgba(255, 255, 255, 0.08);
-    --line-strong: rgba(255, 255, 255, 0.15);
+    --line: rgba(255, 255, 255, 0.10);
+    --line-strong: rgba(255, 255, 255, 0.20);
 
     /* Text */
-    --text-strong: #f4f4f2;
-    --text: #c9cbd1;
-    --text-muted: #8b8d96;
-    --text-faint: #5c5e66;
+    --text-strong: #f0f1f2;
+    --text: #c8ccd2;
+    --text-muted: #9298a2;
+    --text-faint: #626977;
 
-    /* Accent — ember */
-    --accent: #ff7d4d;
-    --glow: rgba(255, 125, 77, 0.14);
+    /* Accent — wine */
+    --accent: #e06c7d;
+    --accent-deep: #eb8b99;
+    --accent-wash: rgba(224, 108, 125, 0.09);
+
+    /* Gold — decorative only (lines, glints), never text: contrast is below AA */
+    --gold: #d2a24c;
 
     /* Effects */
-    --shadow: rgba(0, 0, 0, 0.5);
-    --overlay: rgba(8, 9, 11, 0.9);
-    --nav-bg: rgba(11, 12, 14, 0.72);
-    --nav-bg-solid: rgba(13, 14, 17, 0.95);
+    --glow: rgba(224, 108, 125, 0.12);
     --grain-opacity: 0.06;
+    --shadow: rgba(0, 0, 0, 0.45);
+    --overlay: rgba(13, 16, 23, 0.92);
+    --nav-bg: rgba(21, 25, 36, 0.82);
+    --nav-bg-solid: rgba(24, 28, 40, 0.97);
 }

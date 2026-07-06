@@ -6,15 +6,17 @@ pub fn LanguagesSection() -> Element {
     rsx! {
         section {
             class: "languages-section section",
-            h2 { "Languages" }
-            div {
-                class: "languages-grid",
-                {LANGUAGES.iter().map(|lang| rsx! {
+            h2 { "Spoken Languages" }
+            p {
+                class: "lang-line",
+                {LANGUAGES.iter().enumerate().map(|(i, lang)| rsx! {
+                    if i > 0 {
+                        span { class: "sep", "\u{00B7}" }
+                    }
                     span {
-                        class: "language-item",
-                        span { "{lang.name}" }
+                        "{lang.name}"
                         span {
-                            class: "language-level",
+                            class: "lang-level",
                             "{lang.level}"
                         }
                     }

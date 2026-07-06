@@ -13,7 +13,7 @@ pub fn FooterSection() -> Element {
             }
             p {
                 "Built with Rust \u{2014} Dioxus on the client, axum on the server \u{2014} \
-                and served from a Raspberry Pi in Sofia."
+                and served from a Raspberry Pi."
             }
             p {
                 class: "footer-meta",

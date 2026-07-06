@@ -97,6 +97,7 @@ pub struct ProjectEntry<'a> {
     pub kind: &'a str,
     pub description: &'a str,
     pub url: &'a str,
+    pub crate_url: Option<&'a str>,
     pub homepage: Option<&'a str>,
 }
 
@@ -106,27 +107,31 @@ pub const PROJECTS: &[ProjectEntry] = &[
         kind: "Rust · library, CLI & desktop",
         description: "A pure Rust library, CLI, and desktop application for encrypting and decrypting files and directories with password-based or key-pair encryption.",
         url: "https://github.com/alexylon/ferrocrypt",
+        crate_url: Some("https://crates.io/crates/ferrocrypt"),
         homepage: Some("https://www.ferrocrypt.app"),
     },
     ProjectEntry {
         name: "Sofos Code",
-        kind: "Rust · CLI",
-        description: "A terminal-based AI coding assistant built in Rust, with Claude and GPT support, file editing, and MCP integration. Published on crates.io.",
+        kind: "Rust · TUI",
+        description: "A terminal-based AI coding assistant built in Rust, with Claude and GPT support, file editing, and MCP integration.",
         url: "https://github.com/alexylon/sofos-code",
+        crate_url: Some("https://crates.io/crates/sofos"),
         homepage: None,
     },
     ProjectEntry {
         name: "Sofos Web",
-        kind: "TypeScript · web app",
+        kind: "TypeScript · Next.js app",
         description: "A multi-model AI chatbot built with React, Next.js, and Material UI, with image analysis and speech-to-text support for OpenAI, Anthropic, and Google models.",
         url: "https://github.com/alexylon/sofos-web",
+        crate_url: None,
         homepage: None,
     },
     ProjectEntry {
         name: "clavirio",
-        kind: "Rust · terminal app",
+        kind: "Rust · TUI",
         description: "A terminal-based typing tutor built with Rust and ratatui. Practise with built-in lessons or any text file while a virtual keyboard tracks each keystroke.",
         url: "https://github.com/alexylon/clavirio",
+        crate_url: Some("https://crates.io/crates/clavirio"),
         homepage: Some("https://www.clavir.io"),
     },
     ProjectEntry {
@@ -134,6 +139,7 @@ pub const PROJECTS: &[ProjectEntry] = &[
         kind: "Rust · this site",
         description: "This website — a full-stack Rust application with a Dioxus/WASM frontend and an axum server, hosted on a Raspberry Pi.",
         url: "https://github.com/alexylon/alexo-io",
+        crate_url: None,
         homepage: None,
     },
 ];

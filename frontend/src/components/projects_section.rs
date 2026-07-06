@@ -41,6 +41,15 @@ pub fn ProjectsSection(projects_section: Signal<Option<Rc<MountedData>>>) -> Ele
                                 rel: "noopener noreferrer",
                                 "Source code"
                             }
+                            if let Some(crate_url) = project.crate_url {
+                                a {
+                                    class: "work-link",
+                                    href: "{crate_url}",
+                                    target: "_blank",
+                                    rel: "noopener noreferrer",
+                                    "crates.io"
+                                }
+                            }
                             if let Some(homepage) = project.homepage {
                                 {
                                     let display = homepage.trim_start_matches("https://");

@@ -1043,10 +1043,26 @@ a {
     @media (prefers-reduced-motion: no-preference) {
         .resume > section {
             opacity: 0;
-            animation: rise linear both;
+            /* The `animation` shorthand resets animation-timeline, so the
+               timeline must stay after it. The early-completing keyframes
+               below stand in for `animation-range` (entry 0% → entry 30%),
+               which current CSS tooling can't parse yet. */
+            animation: rise-in-view linear both;
             animation-timeline: view();
-            animation-range: entry 0% entry 30%;
         }
+    }
+}
+
+/* Rises during the first 15% of the element's travel through the viewport,
+   then holds fully visible. */
+@keyframes rise-in-view {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+    15%, to {
+        opacity: 1;
+        transform: none;
     }
 }
 
@@ -1075,9 +1091,15 @@ a {
 
     .apparatus {
         position: static;
+        /* The skills apparatus is a span: block display so the margin applies */
+        display: block;
         width: auto;
         text-align: left;
         margin-bottom: 2px;
+    }
+
+    .skill-row .apparatus {
+        margin-bottom: var(--space-3);
     }
 
     .work + .work .apparatus {
@@ -1107,14 +1129,22 @@ a {
     }
 }
 
-/* Shrink the nav so all five sections fit narrow screens without scrolling */
-@media (max-width: 640px) {
+@media (max-width: 750px) {
     .nav-wordmark-full {
         display: none;
     }
 
     .nav-wordmark-short {
         display: inline;
+    }
+}
+
+/* Shrink the nav so all five sections fit narrow screens without scrolling.
+   Below here the bar carries only the links + toggle: the wordmark goes
+   entirely, giving the links the full width they were sized for. */
+@media (max-width: 580px) {
+    .nav-wordmark {
+        display: none;
     }
 
     .nav-bar {
@@ -1127,18 +1157,18 @@ a {
     }
 
     .nav-link {
-        font-size: 0.68rem;
+        font-size: 0.7rem;
         letter-spacing: 0.07em;
     }
 }
 
 @media (max-width: 490px) {
     html {
-        font-size: 16px;
+        font-size: 15px;
     }
 }
 
-@media (max-width: 430px) {
+@media (max-width: 440px) {
     .nav-bar {
         gap: var(--space-2);
         padding: 0 var(--space-2);
@@ -1154,7 +1184,7 @@ a {
     }
 
     .nav-link {
-        font-size: 0.66rem;
+        font-size: 0.7rem;
         letter-spacing: 0.03em;
     }
 

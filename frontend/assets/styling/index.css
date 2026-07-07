@@ -338,7 +338,7 @@ a {
 }
 
 .nav-link.active::after {
-    width: 16px;
+    width: 24px;
 }
 
 @media (hover: hover) and (pointer: fine) {

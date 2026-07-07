@@ -20,7 +20,7 @@ body:has(main.theme-dark) {
     /* Text */
     --text-strong: #f0f1f2;
     --text: #c8ccd2;
-    --text-muted: #9298a2;
+    --text-muted: #a0a6b1;
     --text-faint: #626977;
 
     /* Accent — wine */

@@ -23,7 +23,7 @@ body:has(main.theme-light) {
     /* Text */
     --text-strong: #1a1d21;
     --text: #33383d;
-    --text-muted: #5f656b;
+    --text-muted: #51575d;
     --text-faint: #8f959b;
 
     /* Accent — wine */

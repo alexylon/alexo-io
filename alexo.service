@@ -5,12 +5,40 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-User=alex
-Group=alex
-WorkingDirectory=/home/alex/git/alexo-io
-ExecStart=/home/alex/.cargo/bin/servio --port 7777 --host 0.0.0.0 --dir /home/alex/git/alexo-io/site_public --spa --no-reload --cache-assets
+User=alexo-web
+Group=alexo-web
+ExecStart=/usr/local/bin/servio --port 7777 --host 0.0.0.0 --dir /srv/alexo/current --spa --no-reload --cache-assets
 Restart=always
 RestartSec=2
+
+# This process is the public origin: everything the site needs is a read of
+# /srv/alexo, so it gets that and nothing else. It cannot become another user,
+# cannot see /home (which is why servio lives in /usr/local/bin and the site
+# lives in /srv), and holds no capabilities at all.
+NoNewPrivileges=true
+CapabilityBoundingSet=
+AmbientCapabilities=
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectProc=invisible
+ProtectClock=true
+ProtectHostname=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictNamespaces=true
+RestrictRealtime=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+LockPersonality=true
+MemoryDenyWriteExecute=true
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+UMask=077
+ReadOnlyPaths=/srv/alexo
 
 [Install]
 WantedBy=multi-user.target

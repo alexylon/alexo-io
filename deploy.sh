@@ -11,6 +11,7 @@
 PORT=7777
 SERVICE_NAME="alexo"          # systemd unit name (see /etc/systemd/system/alexo.service)
 STAGE_DIR="site_public"
+SERVE_ROOT="/srv/alexo"       # what the service actually serves; see alexo.service
 PACKAGE="alexo-io"            # cargo package; also names the dir dx builds into
 
 # -------------------------
@@ -112,9 +113,20 @@ if ! command -v dx >/dev/null 2>&1; then
   exit 1
 fi
 
-# The site is served by servio, which the systemd unit starts.
-if ! command -v servio >/dev/null 2>&1; then
-  print_error "servio not found. Install with: cargo install servio"
+# The site is served by servio, which the systemd unit starts. The unit runs it
+# from /usr/local/bin, because the service cannot see /home at all.
+if [[ ! -x /usr/local/bin/servio ]]; then
+  print_error "/usr/local/bin/servio not found. Install with: sudo cp \"$(command -v servio)\" /usr/local/bin/servio"
+  exit 1
+fi
+
+# The published site lives outside the repo so the account serving it has no
+# read access to anything of yours. This deploy writes there as you; the
+# service only ever reads it.
+if [[ ! -d "${SERVE_ROOT}/releases" || ! -w "${SERVE_ROOT}/releases" ]]; then
+  print_error "${SERVE_ROOT}/releases is missing or not writable. First-time setup:"
+  print_error "  sudo useradd --system --no-create-home --shell /usr/sbin/nologin alexo-web"
+  print_error "  sudo install -d -o ${USER} -g alexo-web -m 750 ${SERVE_ROOT} ${SERVE_ROOT}/releases"
   exit 1
 fi
 
@@ -196,6 +208,35 @@ mv "${STAGE_NEW}" "${STAGE_DIR}"
 rm -rf "${STAGE_OLD}"
 
 print_success "Staged static files to ./${STAGE_DIR}"
+
+# -------------------------
+# Publish into the served directory
+# -------------------------
+# Copy the finished build to ${SERVE_ROOT} as a new release and point `current`
+# at it. Flipping a symlink is one rename, so a visitor mid-deploy gets either
+# the previous release or this one, never a half-copied directory. Old releases
+# stay for a while: rolling back is repointing the symlink.
+publish_release() {
+  local release
+  release="${SERVE_ROOT}/releases/$(date -u +%Y%m%d-%H%M%S)"
+
+  mkdir -p "${release}"
+  cp -R "${STAGE_DIR}/." "${release}/"
+  # The serving account is not in your group and owns none of this: it needs
+  # the world bits to read the files and walk into the directories.
+  chmod -R a+rX "${release}"
+
+  ln -sfn "${release}" "${SERVE_ROOT}/current.new"
+  mv -T "${SERVE_ROOT}/current.new" "${SERVE_ROOT}/current"
+
+  # Keep the three most recent; drop the rest.
+  ( cd "${SERVE_ROOT}/releases" && ls -1dt -- */ 2>/dev/null | tail -n +4 | xargs -r rm -rf )
+
+  print_success "Published to ${release}"
+}
+
+print_status "Publishing to ${SERVE_ROOT}..."
+publish_release
 
 # -------------------------
 # Restart server (managed by systemd)

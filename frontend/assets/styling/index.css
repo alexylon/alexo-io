@@ -567,10 +567,13 @@ a {
     color: var(--text-strong);
 }
 
-/* The lede's one link. Underlined so it reads as a link beside the coloured
-   span, which is not one; it keeps the paragraph's colour so the degrees keep
-   the emphasis. */
-.hero-lede-link {
+/* Links inside running text: the lede's one link, and a project named in a
+   project description. Underlined so they read as links (the lede's sits
+   beside a coloured span that is not one); they keep the paragraph's colour
+   so the degrees keep the emphasis and a description stays quieter than its
+   link row. */
+.hero-lede-link,
+.work-desc-link {
     color: inherit;
     text-decoration: underline;
     text-decoration-thickness: 1px;
@@ -579,12 +582,14 @@ a {
     transition: color var(--t-fast), text-decoration-color var(--t-fast);
 }
 
-.hero-lede-link:visited {
+.hero-lede-link:visited,
+.work-desc-link:visited {
     color: inherit;
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .hero-lede-link:hover {
+    .hero-lede-link:hover,
+    .work-desc-link:hover {
         color: var(--accent);
         text-decoration-color: var(--accent);
     }

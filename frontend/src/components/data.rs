@@ -95,6 +95,7 @@ pub struct ProjectEntry<'a> {
     pub name: &'a str,
     /// Short classification shown in the rail, e.g. "Rust · CLI".
     pub kind: &'a str,
+    /// Plain text, except that `[label](url)` becomes a link.
     pub description: &'a str,
     pub url: &'a str,
     pub crate_url: Option<&'a str>,
@@ -135,9 +136,17 @@ pub const PROJECTS: &[ProjectEntry] = &[
         homepage: Some("https://www.clavir.io"),
     },
     ProjectEntry {
+        name: "servio",
+        kind: "Rust · CLI",
+        description: "A static file server for local development, built with Rust and axum. Run it in any folder and the browser reloads each time you save a file.",
+        url: "https://github.com/alexylon/servio",
+        crate_url: Some("https://crates.io/crates/servio"),
+        homepage: None,
+    },
+    ProjectEntry {
         name: "alexo.io",
         kind: "Rust · this site",
-        description: "This website — a full-stack Rust application with a Dioxus/WASM frontend and an axum server, hosted on a Raspberry Pi.",
+        description: "This website — a full-stack Rust application with a Dioxus/WASM frontend, served by [servio](https://github.com/alexylon/servio) from a Raspberry Pi.",
         url: "https://github.com/alexylon/alexo-io",
         crate_url: None,
         homepage: None,

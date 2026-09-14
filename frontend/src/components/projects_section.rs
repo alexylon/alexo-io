@@ -36,7 +36,20 @@ pub fn ProjectsSection() -> Element {
                             }
                             p {
                                 class: "work-desc",
-                                "{project.description}"
+                                {inline_links(project.description).into_iter().map(|part| {
+                                    match part {
+                                        Part::Text(text) => rsx! { "{text}" },
+                                        Part::Link(label, href) => rsx! {
+                                            a {
+                                                class: "work-desc-link",
+                                                href: "{href}",
+                                                target: "_blank",
+                                                rel: "noopener noreferrer",
+                                                "{label}"
+                                            }
+                                        },
+                                    }
+                                })}
                             }
                             // Each label is the place it lands on, so the row
                             // reads in one register: GitHub, crates.io, the
@@ -83,4 +96,33 @@ fn display_domain(url: &str) -> &str {
     url.trim_start_matches("https://")
         .trim_start_matches("www.")
         .trim_end_matches('/')
+}
+
+/// A stretch of a project description: text, or a link with its label.
+enum Part<'a> {
+    Text(&'a str),
+    Link(&'a str, &'a str),
+}
+
+/// `served by [servio](https://github.com/alexylon/servio)` names a project
+/// and links to it. Anything that is not a whole `[label](url)` stays text.
+fn inline_links(mut rest: &str) -> Vec<Part<'_>> {
+    let mut parts = Vec::new();
+    while let Some((before, link)) = rest.split_once('[') {
+        let Some((label, link)) = link.split_once("](") else {
+            break;
+        };
+        let Some((href, after)) = link.split_once(')') else {
+            break;
+        };
+        if !before.is_empty() {
+            parts.push(Part::Text(before));
+        }
+        parts.push(Part::Link(label, href));
+        rest = after;
+    }
+    if !rest.is_empty() {
+        parts.push(Part::Text(rest));
+    }
+    parts
 }

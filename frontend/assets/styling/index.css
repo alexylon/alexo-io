@@ -1343,7 +1343,7 @@ body:has(.image-overlay[open]) {
     }
 }
 
-@media (max-width: 490px) {
+@media (max-width: 485px) {
     html {
         font-size: 15px;
     }
@@ -1351,7 +1351,7 @@ body:has(.image-overlay[open]) {
 
 /* All five labels must fit beside a 44px toggle at 390px. The budget is spent
    on tracking and gaps, never on the type size. */
-@media (max-width: 440px) {
+@media (max-width: 435px) {
     .nav-bar {
         gap: var(--space-2);
         padding: 0 var(--space-1);
@@ -1372,7 +1372,7 @@ body:has(.image-overlay[open]) {
 /* 320px is an iPhone SE, and what WCAG 1.4.10 Reflow demands (1280px at 400%
    zoom). The type is small here, but a nav item that cannot be reached is the
    worse failure. */
-@media (max-width: 360px) {
+@media (max-width: 380px) {
     .nav-bar {
         padding: 0 2px;
     }

@@ -10,7 +10,8 @@ pub fn EntryCard(
     #[props(default)] items: Vec<String>,
     /// Outbound links below the entry, styled like the projects list, so a
     /// title never has to double as a link.
-    #[props(default)] links: Option<Element>,
+    #[props(default)]
+    links: Option<Element>,
 ) -> Element {
     rsx! {
         div {

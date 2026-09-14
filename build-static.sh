@@ -60,6 +60,10 @@ cp -R "${PUBDIR}/." "${STAGE_NEW}/"
 # Copy OG image to a stable path (Manganis hashes asset filenames).
 cp frontend/assets/images/og-image.png "${STAGE_NEW}/og-image.png"
 
+# Hand-written pages outside the dx bundle (the /projects redirect). Copied
+# after the bundle so they win over anything at the same path.
+cp -R site_extra/. "${STAGE_NEW}/"
+
 # Sanity-check the new build before swapping it in — never replace a live site
 # with a broken or empty one.
 if [[ ! -f "${STAGE_NEW}/index.html" ]]; then

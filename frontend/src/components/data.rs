@@ -124,7 +124,7 @@ pub const PROJECTS: &[ProjectEntry] = &[
         description: "A multi-model AI chatbot built with React, Next.js, and Material UI, with image analysis and speech-to-text support for OpenAI, Anthropic, and Google models.",
         url: "https://github.com/alexylon/sofos-web",
         crate_url: None,
-        homepage: None,
+        homepage: Some("https://www.sofos.me"),
     },
     ProjectEntry {
         name: "clavirio",

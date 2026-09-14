@@ -84,8 +84,23 @@ pub fn HeroSection() -> Element {
                 p {
                     class: "hero-lede reveal",
                     "Currently working in digital publishing; previously in enterprise \
-                    product modelling and automotive security. I publish open-source Rust \
-                    tools on crates.io and hold "
+                    product modelling and automotive security. I publish "
+                    // The claim and its proof are one tap apart. A plain anchor,
+                    // so it works before WASM loads; once loaded it makes the
+                    // nav's move, without a history entry.
+                    a {
+                        class: "hero-lede-link",
+                        href: "#projects",
+                        onclick: move |evt: MouseEvent| {
+                            if !evt.modifiers().is_empty() {
+                                return;
+                            }
+                            evt.prevent_default();
+                            crate::components::go_to_section("projects");
+                        },
+                        "open-source Rust tools"
+                    }
+                    " on crates.io and hold "
                     span { class: "accent", "an MEng in Engineering and a PhD in Theology" }
                     "."
                 }

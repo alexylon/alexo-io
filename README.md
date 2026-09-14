@@ -45,6 +45,7 @@ axum static file server with production and development modes.
 ```
 frontend/        Dioxus app (UI, components, assets) — fullstack/SSG build
 server/          axum static file server
+site_extra/      pages copied into site_public/ as-is (the /projects redirect)
 prerender.sh     drives the SSG pre-render (see Production)
 build-static.sh  build + pre-render + stage into site_public/
 deploy.sh        build-static.sh's work + restart the local service
@@ -126,10 +127,11 @@ A push to `main` runs [`.github/workflows/deploy-vercel.yml`](.github/workflows/
 it installs the Rust toolchain and the Dioxus CLI on an Ubuntu runner, runs
 `build-static.sh`, and uploads the finished `site_public/` with
 `vercel deploy --prebuilt`. Vercel compiles nothing — `vercel.json` only carries
-the security headers, the immutable asset caching and the SPA fallback rewrite,
-mirroring what the axum server does locally. (Building there is not an option:
-the pre-built `dx` binaries need a newer glibc than Vercel's build image has,
-and compiling `dioxus-cli` from source on it runs past half an hour.)
+the security headers, the immutable asset caching, the `/projects` → `/#projects`
+redirect and the SPA fallback rewrite, mirroring what the axum server does
+locally. (Building there is not an option: the pre-built `dx` binaries need a
+newer glibc than Vercel's build image has, and compiling `dioxus-cli` from
+source on it runs past half an hour.)
 
 Set up once, in the repository's Actions secrets:
 

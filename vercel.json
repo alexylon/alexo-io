@@ -46,15 +46,9 @@
   ],
   "redirects": [
     {
-      "source": "/projects",
+      "source": "/projects{/}?",
       "destination": "/#projects",
       "permanent": true
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
     }
   ]
 }

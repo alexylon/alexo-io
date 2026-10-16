@@ -108,7 +108,7 @@ jobs:
       - name: Package site_public into a prebuilt deployment
         # vercel.json's buildCommand is a no-op echo, so this only copies
         # site_public/ into .vercel/output/static and translates the headers
-        # and rewrites into the Build Output API config. No Rust runs here.
+        # and redirects into the Build Output API config. No Rust runs here.
         run: vercel build --prod --token="$VERCEL_TOKEN"
 
       - name: Verify what is about to be deployed

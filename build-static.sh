@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
-# Build the deployable static site into ./site_public
-#
-# This is the build half of deploy.sh — `dx build --ssg`, then prerender.sh,
-# then stage the result — with the native axum server build and the systemd
-# restart left out. Vercel only ever receives the finished site_public/, so
-# this is the single place the site is produced, whether it runs on a
-# workstation or in .github/workflows/deploy-vercel.yml.
+# Build the deployable static site into ./site_public. Vercel only ever receives
+# this directory, locally or from .github/workflows/deploy-vercel.yml.
 #
 # Usage: ./build-static.sh
 
@@ -48,9 +43,7 @@ echo "[build] prerendering static routes (SSG)"
 # -------------------------
 # Stage static files (build aside, then swap into place)
 # -------------------------
-# Build the new site in a sibling dir and swap it in with two quick renames,
-# same as deploy.sh: on the host that still serves site_public/ directly there
-# is then no window where the live dir is empty or half-copied.
+# Built aside and swapped in, so a failed build leaves the last site_public/ intact.
 STAGE_NEW="${STAGE_DIR}.new"
 STAGE_OLD="${STAGE_DIR}.old"
 rm -rf "${STAGE_NEW}" "${STAGE_OLD}"

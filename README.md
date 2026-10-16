@@ -1,8 +1,8 @@
 # alexo.io
 
-Full-stack Rust personal website — statically pre-rendered Dioxus/WASM frontend + axum server.
+Full-stack Rust personal website — a statically pre-rendered Dioxus/WASM frontend, hosted on Vercel.
 
-![](https://github.com/alexylon/alexo-io/actions/workflows/rust.yml/badge.svg)
+![](https://github.com/alexylon/alexo-io/actions/workflows/deploy-vercel.yml/badge.svg)
 
 Live at [alexo.io](https://alexo.io).
 
@@ -32,25 +32,14 @@ time (SSG) and hydrated to WebAssembly in the browser.
   in the browser before the first paint; without JavaScript the link reads "Email"
 - **Print-friendly** — nav, scroll-to-top, and resume download hidden in print layout
 
-## Server
-
-axum static file server with production and development modes.
-
-- **Compression** — gzip and Brotli response compression
-- **SPA fallback** — serves `index.html` for unmatched routes
-- **Cache-Control** — immutable long-lived caching for content-hashed assets, `no-cache` for everything else
-- **Security headers** — `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`
-- **Live reload** — file watcher with debounced browser refresh (disabled in production with `--no-reload`)
-
 ## Project structure
 
 ```
 frontend/        Dioxus app (UI, components, assets) — fullstack/SSG build
-server/          axum static file server
 site_extra/      pages copied into site_public/ as-is (the 404 page)
 prerender.sh     drives the SSG pre-render (see Production)
 build-static.sh  build + pre-render + stage into site_public/
-deploy.sh        build-static.sh's work + restart the local service
+vercel.json      headers, redirects and caching on Vercel
 ```
 
 ## Getting started
@@ -80,13 +69,12 @@ step) and hot-reloads on change — press `r` to rebuild, `ctrl+c` to quit.
 ### Production
 
 ```bash
-./deploy.sh        # build + pre-render (SSG) + stage + restart the service
-./deploy.sh stop   # stop the server
+./build-static.sh   # build + pre-render (SSG) + stage into site_public/
 ```
 
-`deploy.sh` runs `dx build --release --web --ssg` (which produces the fullstack
-server binary), then invokes `prerender.sh` to generate the static HTML, stages
-the result into `site_public/`, and restarts the service.
+`build-static.sh` runs `dx build --release --web --ssg` (which produces the
+fullstack server binary), then invokes `prerender.sh` to generate the static
+HTML and stages the result into `site_public/`, which is what gets deployed.
 
 > **Why a separate `prerender.sh`?** Neither of Dioxus 0.7's build commands
 > produces a complete page on its own, so `prerender.sh` combines them:
@@ -113,17 +101,6 @@ the result into `site_public/`, and restarts the service.
 > `<body>`, so an incomplete merge never gets deployed, and that no email
 > address appears in plain text.
 
-The server runs as a systemd service (`alexo.service` in the repo root) so it
-starts on boot and restarts automatically if it crashes. `deploy.sh` rebuilds
-the site and runs `systemctl restart alexo`. First-time setup on the host:
-
-```bash
-sudo cp alexo.service /etc/systemd/system/
-sudo systemctl enable --now alexo
-```
-
-Inspect with `systemctl status alexo` and `journalctl -u alexo -f`.
-
 ### Deployment (Vercel)
 
 A push to `main` runs [`.github/workflows/deploy-vercel.yml`](.github/workflows/deploy-vercel.yml):
@@ -148,17 +125,5 @@ Set up once, in the repository's Actions secrets:
 | `VERCEL_TOKEN` | <https://vercel.com/account/tokens> |
 | `VERCEL_ORG_ID` | `orgId` in `.vercel/project.json` after `vercel link` |
 | `VERCEL_PROJECT_ID` | `projectId` in the same file |
-
-## Server options
-
-```
-server --port 7777 --dir ./site_public --no-reload
-```
-
-| Flag | Default | Description |
-|------|---------|-------------|
-| `--port`, `-p` | `3030` | Port to listen on |
-| `--dir`, `-d` | `.` | Directory to serve |
-| `--no-reload` | off | Disable live reload and file watching |
 
 [![forthebadge](https://forthebadge.com/images/badges/made-with-rust.svg)](https://forthebadge.com)

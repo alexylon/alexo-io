@@ -114,9 +114,11 @@ of search results. Unknown URLs get `site_extra/404.html` with a 404 status.
 newer glibc than Vercel's build image has, and compiling `dioxus-cli` from
 source on it runs past half an hour.)
 
-The workflow also runs on the 1st of every month, so the years of experience and
-the footer year never go stale between pushes. GitHub pauses scheduled runs in a
-repository with no commits for 60 days; re-enable it from the Actions tab.
+The workflow also runs on the 1st of every month, so the prerendered years of
+experience and footer year are right before the app loads and for readers that
+don't run JavaScript; once it loads, the app shows the visitor's own date anyway.
+GitHub pauses scheduled runs in a repository with no commits for 60 days;
+re-enable it from the Actions tab.
 
 Set up once, in the repository's Actions secrets:
 

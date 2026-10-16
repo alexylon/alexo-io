@@ -38,7 +38,7 @@ fn close_portrait() {
 #[component]
 pub fn HeroSection() -> Element {
     let resume_href = asset!("/assets/docs/Resume_Alexander_Alexandrov.pdf").to_string();
-    let years = crate::years_since(CAREER_START_YEAR, CAREER_START_MONTH0);
+    let years = crate::use_current(|| crate::years_since(CAREER_START_YEAR, CAREER_START_MONTH0));
 
     rsx! {
         header {

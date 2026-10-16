@@ -95,8 +95,8 @@ impl Theme {
     }
 }
 
-/// Today's `(year, month0)`, month 0-indexed. Computed per-target so the
-/// server-prerendered value matches the client's on hydration.
+/// Today's `(year, month0)`, month 0-indexed: build time in the prerender, visit
+/// time in the browser.
 fn current_year_month0() -> (u32, u32) {
     #[cfg(target_arch = "wasm32")]
     {
@@ -144,6 +144,16 @@ fn current_year_month0() -> (u32, u32) {
 
 pub(crate) fn current_year() -> u32 {
     current_year_month0().0
+}
+
+/// Starts at the prerendered value so hydration matches the page, then moves to
+/// the visitor's date: hydration alone would keep the build-time text.
+#[track_caller]
+pub(crate) fn use_current(now: fn() -> u32) -> Signal<u32> {
+    let built = use_server_cached(now);
+    let mut value = use_signal(|| built);
+    use_effect(move || value.set(now()));
+    value
 }
 
 /// Whole years since `start_year`/`start_month0`, counting a year only once its

@@ -2,7 +2,7 @@ use dioxus::prelude::*;
 
 #[component]
 pub fn FooterSection() -> Element {
-    let year = crate::current_year();
+    let year = crate::use_current(crate::current_year);
 
     rsx! {
         // Contact closes the page. This is only the notice line.

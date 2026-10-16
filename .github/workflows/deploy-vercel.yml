@@ -18,7 +18,7 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-  # Monthly, so the years of experience and the footer year stay current.
+  # Monthly, so the prerendered dates stay current.
   schedule:
     - cron: "23 4 1 * *"
 

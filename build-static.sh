@@ -50,8 +50,9 @@ rm -rf "${STAGE_NEW}" "${STAGE_OLD}"
 mkdir -p "${STAGE_NEW}"
 cp -R "${PUBDIR}/." "${STAGE_NEW}/"
 
-# Copy OG image to a stable path (Manganis hashes asset filenames).
+# Stable paths for the OG image and the 404 page's icon (Manganis hashes asset names).
 cp frontend/assets/images/og-image.png "${STAGE_NEW}/og-image.png"
+cp frontend/assets/images/favicon.png "${STAGE_NEW}/favicon.png"
 
 # Hand-written pages outside the dx bundle (the 404 page). Copied after the
 # bundle so they win over anything at the same path.

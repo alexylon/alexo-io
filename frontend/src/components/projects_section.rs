@@ -104,8 +104,7 @@ enum Part<'a> {
     Link(&'a str, &'a str),
 }
 
-/// `served by [servio](https://github.com/alexylon/servio)` names a project
-/// and links to it. Anything that is not a whole `[label](url)` stays text.
+/// A whole `[label](url)` in a description becomes a link; anything else stays text.
 fn inline_links(mut rest: &str) -> Vec<Part<'_>> {
     let mut parts = Vec::new();
     while let Some((before, link)) = rest.split_once('[') {

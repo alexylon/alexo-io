@@ -208,7 +208,7 @@ email="$(python3 -c 'import sys; b = bytes.fromhex(sys.argv[1]); print(bytes(x ^
 leaks="$(grep -rlaF --exclude='*.pdf' "${email}" "${PUBLIC}" || true)"
 [[ -z "${leaks}" ]] || fail "the email address is in plain text in: ${leaks}"
 links="$(grep -o 'data-email="' "${INDEX}" | wc -l | tr -d ' ' || true)"
-decoders="$(grep -ozE '</a>(\s|<!--[^>]*-->)*<script[^>]*>[^<]*previousElementSibling' "${INDEX}" | tr -cd '\0' | wc -c | tr -d ' ' || true)"
+decoders="$(grep -ozE '</a>([[:space:]]|<!--[^>]*-->)*<script[^>]*>[^<]*previousElementSibling' "${INDEX}" | tr -cd '\0' | wc -c | tr -d ' ' || true)"
 [[ "${links}" == "${decoders}" ]] || fail "${links} encoded email links but ${decoders} decoder scripts right after them."
 # Exactly one <body> — guard against duplicated/concatenated renders.
 body_count="$(grep -oc '<body' "${INDEX}" || true)"

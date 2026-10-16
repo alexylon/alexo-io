@@ -4,7 +4,7 @@ Full-stack Rust personal website — statically pre-rendered Dioxus/WASM fronten
 
 ![](https://github.com/alexylon/alexo-io/actions/workflows/rust.yml/badge.svg)
 
-Live at [alexo.io](https://alexo.io), hosted on a Raspberry Pi.
+Live at [alexo.io](https://alexo.io).
 
 Dioxus app written entirely in Rust, **pre-rendered to static HTML** at build
 time (SSG) and hydrated to WebAssembly in the browser.

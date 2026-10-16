@@ -146,7 +146,7 @@ pub const PROJECTS: &[ProjectEntry] = &[
     ProjectEntry {
         name: "alexo.io",
         kind: "Rust · this site",
-        description: "This website — a full-stack Rust application with a Dioxus/WASM frontend, served by [servio](https://github.com/alexylon/servio) from a Raspberry Pi.",
+        description: "This website — a full-stack Rust application with a Dioxus/WASM frontend.",
         url: "https://github.com/alexylon/alexo-io",
         crate_url: None,
         homepage: None,

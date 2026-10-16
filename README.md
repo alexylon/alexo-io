@@ -28,6 +28,8 @@ time (SSG) and hydrated to WebAssembly in the browser.
   - Focus-visible rings, ARIA labels, semantic HTML, WCAG AA contrast in both themes
 - **SEO** — pre-rendered content + Open Graph / Twitter Card meta tags, JSON-LD
   structured data, canonical URL
+- **Email kept from scrapers** — XOR-encoded in the source and the page, decoded
+  in the browser before the first paint; without JavaScript the link reads "Email"
 - **Print-friendly** — nav, scroll-to-top, and resume download hidden in print layout
 
 ## Server
@@ -108,7 +110,8 @@ the result into `site_public/`, and restarts the service.
 > first paint (so there's no flash). The finished page has the full `<head>`,
 > stylesheets, pre-rendered content, and hydration in one file. Before exiting,
 > the script checks that all of those are present and that there's exactly one
-> `<body>`, so an incomplete merge never gets deployed.
+> `<body>`, so an incomplete merge never gets deployed, and that no email
+> address appears in plain text.
 
 The server runs as a systemd service (`alexo.service` in the repo root) so it
 starts on boot and restarts automatically if it crashes. `deploy.sh` rebuilds

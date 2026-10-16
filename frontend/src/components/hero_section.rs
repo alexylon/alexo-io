@@ -1,4 +1,5 @@
 use crate::components::data::{CONTACT_LINKS, PROFILE};
+use crate::components::email_link::EmailLink;
 use dioxus::prelude::*;
 
 // September 2019, month index 8. Drives the "N+ years" figure.
@@ -106,19 +107,18 @@ pub fn HeroSection() -> Element {
                 }
                 div {
                     class: "hero-links reveal",
+                    EmailLink { class: "hero-link hero-link-email" }
                     {CONTACT_LINKS.iter().map(|link| {
                         let href = if link.download.is_some() {
                             resume_href.clone()
                         } else {
                             link.href.to_string()
                         };
-                        let (label, class) = if link.href.starts_with("mailto:") {
-                            (link.href.trim_start_matches("mailto:"), "hero-link hero-link-email")
-                        } else if link.download.is_some() {
+                        let class = if link.download.is_some() {
                             // Marked so it does not read as another profile link.
-                            (link.label, "hero-link hero-link-file")
+                            "hero-link hero-link-file"
                         } else {
-                            (link.label, "hero-link")
+                            "hero-link"
                         };
                         rsx! {
                             // Optional, never `unwrap_or("")`: an empty
@@ -130,7 +130,7 @@ pub fn HeroSection() -> Element {
                                 target: link.target,
                                 rel: link.rel,
                                 download: link.download,
-                                "{label}"
+                                "{link.label}"
                             }
                         }
                     })}

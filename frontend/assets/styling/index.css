@@ -1027,6 +1027,18 @@ body:has(.image-overlay[open]) {
     }
 }
 
+/* No JavaScript means no address to link to. */
+.hero-link.hero-link-email:not([href]),
+.contact-email:not([href]) {
+    color: var(--text-muted);
+    background-image: none;
+    cursor: default;
+}
+
+.hero-link.hero-link-email:not([href])::after {
+    display: none;
+}
+
 .contact-links {
     display: flex;
     flex-wrap: wrap;

@@ -146,7 +146,7 @@ pub const PROJECTS: &[ProjectEntry] = &[
     ProjectEntry {
         name: "alexo.io",
         kind: "Rust · this site",
-        description: "This website — a full-stack Rust application with a Dioxus/WASM frontend, served by [servio](https://github.com/alexylon/servio) from a Raspberry Pi.",
+        description: "This website — a full-stack Rust application with a Dioxus/WASM frontend.",
         url: "https://github.com/alexylon/alexo-io",
         crate_url: None,
         homepage: None,
@@ -228,6 +228,32 @@ pub const LANGUAGES: &[Language] = &[
     },
 ];
 
+// XOR-encoded, first byte is the key. To change the address:
+// python3 -c "k=0x5a; print(', '.join(f'0x{b:02x}' for b in bytes([k]) + bytes(c ^ k for c in b'you@example.com')))"
+pub struct Email {
+    pub label: &'static str,
+    encoded: &'static [u8],
+}
+
+pub const EMAIL: Email = Email {
+    label: "Email",
+    encoded: &[
+        0x5a, 0x32, 0x33, 0x1a, 0x3b, 0x36, 0x3f, 0x22, 0x35, 0x74, 0x33, 0x35,
+    ],
+};
+
+impl Email {
+    pub fn hex(&self) -> String {
+        self.encoded.iter().map(|b| format!("{b:02x}")).collect()
+    }
+
+    // Client-only: called during the prerender, it would put the address in the HTML.
+    pub fn address(&self) -> String {
+        let (key, bytes) = self.encoded.split_first().expect("empty encoded address");
+        bytes.iter().map(|b| char::from(b ^ key)).collect()
+    }
+}
+
 pub struct ContactLink<'a> {
     pub label: &'a str,
     pub href: &'a str,
@@ -237,13 +263,6 @@ pub struct ContactLink<'a> {
 }
 
 pub const CONTACT_LINKS: &[ContactLink] = &[
-    ContactLink {
-        label: "Email",
-        href: "mailto:hi@alexo.io",
-        target: None,
-        rel: None,
-        download: None,
-    },
     ContactLink {
         label: "LinkedIn",
         href: "https://www.linkedin.com/in/alexandrovalexander/",

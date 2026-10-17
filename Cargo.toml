@@ -1,5 +1,5 @@
 [workspace]
-members = ["frontend", "server"]
+members = ["frontend"]
 resolver = "3"
 
 [profile.wasm-dev]

@@ -200,6 +200,16 @@ grep -q 'id="main"' "${INDEX}"     || fail "merged index.html missing #main."
 grep -qE '<div id="main"></div>' "${INDEX}" && fail "merged index.html still has an empty #main — body not spliced."
 # Real content actually present?
 grep -q 'FerroCrypt' "${INDEX}"    || fail "merged index.html has no prerendered content (expected project names)."
+# The address may only appear XOR-encoded (email_link.rs). The résumé PDF is exempt.
+email_hex="$(grep -o 'data-email="[0-9a-f]*"' "${INDEX}" | head -n1 | cut -d'"' -f2 || true)"
+[[ -n "${email_hex}" ]] || fail "merged index.html has no encoded email link."
+email="$(python3 -c 'import sys; b = bytes.fromhex(sys.argv[1]); print(bytes(x ^ b[0] for x in b[1:]).decode())' "${email_hex}")" \
+  || fail "could not decode data-email=\"${email_hex}\"."
+leaks="$(grep -rlaF --exclude='*.pdf' "${email}" "${PUBLIC}" || true)"
+[[ -z "${leaks}" ]] || fail "the email address is in plain text in: ${leaks}"
+links="$(grep -o 'data-email="' "${INDEX}" | wc -l | tr -d ' ' || true)"
+decoders="$(grep -ozE '</a>([[:space:]]|<!--[^>]*-->)*<script[^>]*>[^<]*previousElementSibling' "${INDEX}" | tr -cd '\0' | wc -c | tr -d ' ' || true)"
+[[ "${links}" == "${decoders}" ]] || fail "${links} encoded email links but ${decoders} decoder scripts right after them."
 # Exactly one <body> — guard against duplicated/concatenated renders.
 body_count="$(grep -oc '<body' "${INDEX}" || true)"
 [[ "${body_count}" == "1" ]] || fail "merged index.html has ${body_count} <body> tags — duplicated render."

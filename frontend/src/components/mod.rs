@@ -2,6 +2,7 @@ pub mod certifications_section;
 pub mod contact_section;
 mod data;
 pub mod education_section;
+mod email_link;
 pub mod entry_card;
 pub mod experience_section;
 pub mod footer_section;

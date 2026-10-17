@@ -109,7 +109,7 @@ pub const PROJECTS: &[ProjectEntry] = &[
         description: "A pure Rust library, CLI, and desktop application for encrypting and decrypting files and directories with password-based or key-pair encryption.",
         url: "https://github.com/alexylon/ferrocrypt",
         crate_url: Some("https://crates.io/crates/ferrocrypt"),
-        homepage: Some("https://www.ferrocrypt.app"),
+        homepage: Some("https://ferrocrypt.app"),
     },
     ProjectEntry {
         name: "Sofos Code",
@@ -125,7 +125,7 @@ pub const PROJECTS: &[ProjectEntry] = &[
         description: "A multi-model AI chatbot built with React, Next.js, and Material UI, with image analysis and speech-to-text support for OpenAI, Anthropic, and Google models.",
         url: "https://github.com/alexylon/sofos-web",
         crate_url: None,
-        homepage: Some("https://www.sofos.me"),
+        homepage: Some("https://sofos.me"),
     },
     ProjectEntry {
         name: "clavirio",
@@ -133,7 +133,7 @@ pub const PROJECTS: &[ProjectEntry] = &[
         description: "A terminal-based typing tutor built with Rust and ratatui. Practise with built-in lessons or any text file while a virtual keyboard tracks each keystroke.",
         url: "https://github.com/alexylon/clavirio",
         crate_url: Some("https://crates.io/crates/clavirio"),
-        homepage: Some("https://www.clavir.io"),
+        homepage: Some("https://clavir.io"),
     },
     ProjectEntry {
         name: "servio",

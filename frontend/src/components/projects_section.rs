@@ -8,8 +8,8 @@ pub fn ProjectsSection() -> Element {
             id: "projects",
             class: "projects-section section",
             tabindex: "-1",
-            // Matches the nav label. The rail kinds and the GitHub links
-            // already say these are open source.
+            // Matches the nav label. The GitHub links already say which of
+            // these are open source.
             h2 { "Projects" }
             div {
                 class: "works-list",
@@ -17,7 +17,7 @@ pub fn ProjectsSection() -> Element {
                     // The name goes where the project lives: its own site when
                     // it has one, otherwise the repository. The row beneath
                     // still names every destination.
-                    let primary = project.homepage.unwrap_or(project.url);
+                    let primary = project.homepage.or(project.url).unwrap_or_default();
                     rsx! {
                         article {
                             class: "work",
@@ -56,12 +56,14 @@ pub fn ProjectsSection() -> Element {
                             // project's own domain.
                             div {
                                 class: "work-links",
-                                a {
-                                    class: "work-link",
-                                    href: "{project.url}",
-                                    target: "_blank",
-                                    rel: "noopener noreferrer",
-                                    "GitHub"
+                                if let Some(url) = project.url {
+                                    a {
+                                        class: "work-link",
+                                        href: "{url}",
+                                        target: "_blank",
+                                        rel: "noopener noreferrer",
+                                        "GitHub"
+                                    }
                                 }
                                 if let Some(crate_url) = project.crate_url {
                                     a {

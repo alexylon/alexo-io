@@ -80,7 +80,7 @@ Deliberately **not** the lead: "Rust specialist." Rust is a tool he reaches for 
 All of the following is real and verifiable — nothing here needs to be invented, and nothing beyond it may be:
 
 - **Employment:** Proxiad (Senior Full-Stack Web Developer, Aug 2023–present); DXC Technology (Full-Stack Developer, Apr 2020–Aug 2023); Camplight (Web Developer Intern, Sep 2019–Apr 2020). Career start Sep 2019 — the "N+ years" figure is computed at render time, never hardcoded.
-- **Published projects with live URLs:** FerroCrypt (github, crates.io, ferrocrypt.app), Sofos Code (github, crates.io/crates/sofos), Sofos Web (github), clavirio (github, crates.io, clavir.io), servio (github, crates.io), alexo.io itself (github).
+- **Published projects with live URLs:** FerroCrypt (github, crates.io, ferrocrypt.app), Stropha (stropha.app only — a Markdown writing app written entirely in Rust, announced as coming soon, repository still private), Sofos Code (github, crates.io/crates/sofos), Sofos Web (github), clavirio (github, crates.io, clavir.io), servio (github, crates.io), alexo.io itself (github).
 - **Named production work:** AI MCP server in Rust; Java→Rust rewrite of the Next Gen Product Accelerator; an LSP server for the VP/MS modelling language; BMW Group Vulnerability Tool; a 90% query-time reduction (30s → 3s) via PostgreSQL/iBATIS optimisation.
 - **Education:** PhD in Theology (Sofia University "St. Kliment Ohridski"); MEng in Engineering (University of Forestry); High School of Mathematics; Camplight Academy (React & JavaScript); MaxPlus (Java Fundamentals).
 - **Certification:** Oracle Certified Associate, Java SE 8 Programmer (Jan 2019) — verifiable on Credly.

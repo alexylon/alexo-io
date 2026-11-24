@@ -263,13 +263,22 @@ a {
 }
 
 /* Rail metadata: right-aligned against the gutter, top-aligned with its
-   entry's first line. */
+   entry's first line. A label longer than the rail runs on into the page
+   margin to its left, which is wide on a wide screen, so it stays on one line;
+   it wraps, balanced, only where that margin runs out. The max-width is the
+   rail plus the margin left of it (the page's side padding plus whatever the
+   centred column leaves free), less a little air. */
 .apparatus {
     position: absolute;
     right: calc(100% + var(--rail-gap));
     top: 0.30em;
-    width: var(--rail-w);
+    width: max-content;
+    max-width: calc(
+        var(--rail-w) + var(--content-padding)
+        + max(0px, (100vw - var(--max-width)) / 2) - var(--space-4)
+    );
     text-align: right;
+    text-wrap: balance;
     font-family: var(--font-mono);
     font-size: 0.72rem;
     line-height: 1.7;
@@ -1262,6 +1271,7 @@ body:has(.image-overlay[open]) {
         /* The skills apparatus is a span: block display so the margin applies */
         display: block;
         width: auto;
+        max-width: none;
         text-align: left;
         margin-bottom: 2px;
     }
@@ -1481,6 +1491,7 @@ body:has(.image-overlay[open]) {
     .apparatus {
         position: static;
         width: auto;
+        max-width: none;
         text-align: left;
     }
 

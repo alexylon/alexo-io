@@ -52,8 +52,10 @@ pub fn ProjectsSection() -> Element {
                                 })}
                             }
                             // Each label is the place it lands on, so the row
-                            // reads in one register: GitHub, crates.io, the
-                            // project's own domain.
+                            // reads in one register and in a fixed order:
+                            // the source (GitHub), then where to install it
+                            // (crates.io, snapcraft.io), then the project's
+                            // own domain, which the name above also links to.
                             div {
                                 class: "work-links",
                                 if let Some(url) = project.url {
@@ -72,6 +74,15 @@ pub fn ProjectsSection() -> Element {
                                         target: "_blank",
                                         rel: "noopener noreferrer",
                                         "crates.io"
+                                    }
+                                }
+                                if let Some(snap_url) = project.snap_url {
+                                    a {
+                                        class: "work-link",
+                                        href: "{snap_url}",
+                                        target: "_blank",
+                                        rel: "noopener noreferrer",
+                                        "snapcraft.io"
                                     }
                                 }
                                 if let Some(homepage) = project.homepage {

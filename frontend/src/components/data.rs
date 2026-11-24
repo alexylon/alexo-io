@@ -100,6 +100,8 @@ pub struct ProjectEntry<'a> {
     /// The GitHub repository; `None` while it is private.
     pub url: Option<&'a str>,
     pub crate_url: Option<&'a str>,
+    /// The Snap Store listing, for projects packaged as a snap.
+    pub snap_url: Option<&'a str>,
     pub homepage: Option<&'a str>,
 }
 
@@ -110,6 +112,7 @@ pub const PROJECTS: &[ProjectEntry] = &[
         description: "A pure Rust library, CLI, and desktop application for encrypting and decrypting files and directories with password-based or key-pair encryption.",
         url: Some("https://github.com/alexylon/ferrocrypt"),
         crate_url: Some("https://crates.io/crates/ferrocrypt"),
+        snap_url: Some("https://snapcraft.io/ferrocrypt"),
         homepage: Some("https://ferrocrypt.app"),
     },
     ProjectEntry {
@@ -118,7 +121,17 @@ pub const PROJECTS: &[ProjectEntry] = &[
         description: "A quiet Markdown writing app for macOS, Windows, and Linux, written entirely in Rust, with one engine shared by the app, its CLI, and its MCP server. Files stay plain Markdown, and text an AI writes can be marked as its own. Coming soon.",
         url: None,
         crate_url: None,
+        snap_url: None,
         homepage: Some("https://stropha.app"),
+    },
+    ProjectEntry {
+        name: "clavirio",
+        kind: "Rust · TUI",
+        description: "A terminal-based typing tutor built with Rust and ratatui. Practise with built-in lessons or any text file while a virtual keyboard tracks each keystroke.",
+        url: Some("https://github.com/alexylon/clavirio"),
+        crate_url: Some("https://crates.io/crates/clavirio"),
+        snap_url: Some("https://snapcraft.io/clavirio"),
+        homepage: Some("https://clavir.io"),
     },
     ProjectEntry {
         name: "Sofos Code",
@@ -126,6 +139,7 @@ pub const PROJECTS: &[ProjectEntry] = &[
         description: "A terminal-based AI coding assistant built in Rust, with Claude and GPT support, file editing, and MCP integration.",
         url: Some("https://github.com/alexylon/sofos-code"),
         crate_url: Some("https://crates.io/crates/sofos"),
+        snap_url: None,
         homepage: None,
     },
     ProjectEntry {
@@ -134,15 +148,8 @@ pub const PROJECTS: &[ProjectEntry] = &[
         description: "A multi-model AI chatbot built with React, Next.js, and Material UI, with image analysis and speech-to-text support for OpenAI, Anthropic, and Google models.",
         url: Some("https://github.com/alexylon/sofos-web"),
         crate_url: None,
+        snap_url: None,
         homepage: Some("https://sofos.me"),
-    },
-    ProjectEntry {
-        name: "clavirio",
-        kind: "Rust · TUI",
-        description: "A terminal-based typing tutor built with Rust and ratatui. Practise with built-in lessons or any text file while a virtual keyboard tracks each keystroke.",
-        url: Some("https://github.com/alexylon/clavirio"),
-        crate_url: Some("https://crates.io/crates/clavirio"),
-        homepage: Some("https://clavir.io"),
     },
     ProjectEntry {
         name: "servio",
@@ -150,6 +157,7 @@ pub const PROJECTS: &[ProjectEntry] = &[
         description: "A static file server for local development, built with Rust and axum. Run it in any folder and the browser reloads each time you save a file.",
         url: Some("https://github.com/alexylon/servio"),
         crate_url: Some("https://crates.io/crates/servio"),
+        snap_url: None,
         homepage: None,
     },
     ProjectEntry {
@@ -158,6 +166,7 @@ pub const PROJECTS: &[ProjectEntry] = &[
         description: "This website — a full-stack Rust application with a Dioxus/WASM frontend.",
         url: Some("https://github.com/alexylon/alexo-io"),
         crate_url: None,
+        snap_url: None,
         homepage: None,
     },
 ];
